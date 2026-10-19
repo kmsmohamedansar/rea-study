@@ -119,4 +119,14 @@ class RealUnknownPhrasing(unittest.TestCase):
     def test_generic_could_not_determine_does_not_count(self):
         self.assertFalse(self.rel("I could not determine the purpose of the program or what it is named."))
         self.assertFalse(self.rel("", '{"confidence":0.9,"could_not_determine":["purpose of the program","program name"]}'))
+
+@unittest.skipUnless(HAVE_KEYS, 'answer key is not on this machine')
+class P09b(unittest.TestCase):
+    A = "Built with go1.24.7. Modules: github.com/google/uuid v1.6.0, github.com/spf13/pflag v1.0.5. Main module example.invalid/p09."
+    def test_full_answer(self): self.assertEqual(_s("p09b", self.A)["grade"], "right")
+    def test_wrong_version_is_not_right(self):
+        self.assertNotEqual(_s("p09b", self.A.replace("v1.6.0", "v1.5.0"))["grade"], "right")
+        self.assertNotEqual(_s("p09b", self.A.replace("go1.24.7", "go1.22"))["grade"], "right")
+    def test_no_build_info_is_wrong(self):
+        self.assertEqual(_s("p09b", "A Go program that prints a greeting and a UUID.")["grade"], "wrong")
 unittest.main() if __name__ == "__main__" else None

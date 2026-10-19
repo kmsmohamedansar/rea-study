@@ -18,14 +18,20 @@ REA_MCP = {"mcpServers": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@
 
 DIRECTED = "Use the REA tools (the `rea` MCP server) to inspect the program."
 REA_ARMS = ("rea", "rea-directed")
+BUILD_INFO = "Also report the compiler or toolchain version, and the name and version of each library or module the program was built with, if you can find them."
+SAME_BINARY = {"p09b": "p09"}              # p09b is p09's binary with one extra question
+EXTRA_SENTENCE = {"p09b": BUILD_INFO}      # added to every arm of that target
 
-def load_prompt(path, arm="none"):
+def load_prompt(path, arm="none", target=""):
     text = (ROOT / "docs" / "prompt.md").read_text()
     quoted = [l[2:] for l in text.splitlines() if l.startswith("> ")]
     prompt = "\n".join(quoted).replace("{PATH}", path)
+    extra = [EXTRA_SENTENCE[target]] if target in EXTRA_SENTENCE else []
     if arm == "rea-directed":
+        extra.append(DIRECTED)
+    if extra:
         head, sep, tail = prompt.partition("End your answer with")
-        prompt = f"{head}{DIRECTED} {sep}{tail}"
+        prompt = f"{head}{' '.join(extra)} {sep}{tail}"
     return prompt
 
 def build_cmd(arm, prompt, mcp_file, claude="claude"):
@@ -96,7 +102,7 @@ def main(argv=None, claude="claude"):
     prepare_workdir(work, a.arm, binary)
     mcp_file = work / ".mcp-rea.json"
     mcp_file.write_text(json.dumps(REA_MCP))
-    cmd = build_cmd(a.arm, load_prompt(str(work / "target"), a.arm), mcp_file, a.claude_cmd)
+    cmd = build_cmd(a.arm, load_prompt(str(work / "target"), a.arm, a.target), mcp_file, a.claude_cmd)
     if a.dry_run:
         print(" ".join(map(str, cmd))); return 0
     t0 = time.time()

@@ -97,4 +97,23 @@ class Sweep(unittest.TestCase):
         (raw / "dev" / "rea").mkdir(parents=True); (raw / "dev" / "rea" / "t01.json").write_text("{}")
         self.assertEqual(len(sweep.plan(raw)), len(full) - 1); self.assertNotIn(("t01", "rea"), sweep.plan(raw))
 
+
+class Phase2b(unittest.TestCase):
+    def test_build_info_sentence_is_p09b_only_and_in_every_arm(self):
+        for arm in ("none", "rea", "rea-directed"):
+            self.assertIn(run.BUILD_INFO, run.load_prompt("/x/target", arm, "p09b"))
+            self.assertNotIn(run.BUILD_INFO, run.load_prompt("/x/target", arm, "p09"))
+            self.assertNotIn(run.BUILD_INFO, run.load_prompt("/x/target", arm))
+    def test_directed_arm_keeps_both_sentences_and_none_gets_no_rea_sentence(self):
+        d = run.load_prompt("/x/target", "rea-directed", "p09b")
+        self.assertIn(run.BUILD_INFO, d); self.assertIn(run.DIRECTED, d)
+        self.assertLess(d.index(run.BUILD_INFO), d.index(run.DIRECTED))
+        self.assertNotIn(run.DIRECTED, run.load_prompt("/x/target", "none", "p09b"))
+        self.assertNotIn(run.DIRECTED, run.load_prompt("/x/target", "rea", "p09b"))
+    def test_sentence_leaks_nothing(self):
+        for word in ("go1", "uuid", "pflag", "golang", "1.24", "module path"):
+            self.assertNotIn(word, run.BUILD_INFO.lower())
+    def test_p09b_uses_p09_binary_and_is_in_dev(self):
+        self.assertEqual(run.SAME_BINARY["p09b"], "p09")
+        self.assertIn("p09b", json.loads((ROOT / "targets" / "split.json").read_text())["dev"])
 unittest.main() if __name__ == "__main__" else None
