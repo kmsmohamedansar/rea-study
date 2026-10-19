@@ -6,7 +6,9 @@ import run, results
 FAKE = """#!/bin/sh
 case "$1" in --version) echo "fake-claude 0.0"; exit 0;; esac
 cat <<'JSON'
-{"result": "Checks 3 groups of uppercase letters; sum modulo 7.\\n{\\"confidence\\": 0.9, \\"could_not_determine\\": []}", "num_turns": 4, "total_cost_usd": 0.1}
+{"type": "system", "subtype": "init", "tools": ["Bash", "mcp__rea__x"], "mcp_servers": [{"name": "rea", "status": "connected"}]}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "Bash"}, {"type": "tool_use", "name": "mcp__rea__x"}]}}
+{"type": "result", "result": "Checks 3 groups of uppercase letters; sum modulo 7.\\n{\\"confidence\\": 0.9, \\"could_not_determine\\": []}", "num_turns": 4, "total_cost_usd": 0.1}
 JSON
 """
 
@@ -53,6 +55,8 @@ class T(unittest.TestCase):
         s = json.loads((out / "dev.json").read_text())["summary"]
         self.assertEqual(s["none"]["right"], 1); self.assertEqual(s["rea"]["n"], 1)
         self.assertEqual(s["none"]["mean_turns"], 4)
+        self.assertEqual(rec["tools_used"], {"Bash": 1, "mcp__rea__x": 1}); self.assertEqual(rec["rea_tools_available"], 1)
+        self.assertEqual(s["rea"]["runs_that_called_rea"], 1)
 
     @NEEDS_KEY
     def test_broken_run_is_failed_not_wrong(self):

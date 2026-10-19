@@ -23,12 +23,30 @@ def load_prompt(path):
 
 def build_cmd(arm, prompt, mcp_file, claude="claude"):
     tools = TOOLS + (["mcp__rea"] if arm == "rea" else [])
-    cmd = [claude, "-p", prompt, "--model", MODEL, "--output-format", "json",
+    cmd = [claude, "-p", prompt, "--model", MODEL, "--output-format", "stream-json", "--verbose",
            "--no-session-persistence", "--permission-mode", "acceptEdits",
            "--allowedTools", *tools, "--strict-mcp-config"]
     if arm == "rea":
         cmd += ["--mcp-config", str(mcp_file)]
     return cmd
+
+def parse_stream(text):
+    """stream-json: one event per line. Returns (result_event, tool_counts, init_event)."""
+    result, init, tools = None, None, {}
+    for line in text.splitlines():
+        try:
+            ev = json.loads(line)
+        except ValueError:
+            continue
+        if ev.get("type") == "system" and ev.get("subtype") == "init":
+            init = ev
+        elif ev.get("type") == "assistant":
+            for block in (ev.get("message") or {}).get("content") or []:
+                if isinstance(block, dict) and block.get("type") == "tool_use":
+                    tools[block.get("name", "?")] = tools.get(block.get("name", "?"), 0) + 1
+        elif ev.get("type") == "result":
+            result = ev
+    return result, tools, init
 
 def split_of(target, keys):
     return "heldout" if target in keys["split"]["heldout"] else "dev"
@@ -69,16 +87,18 @@ def main(argv=None, claude="claude"):
     t0 = time.time()
     p = subprocess.run(cmd, cwd=work, capture_output=True, text=True)
     wall = round(time.time() - t0, 1)
-    try:
-        result = json.loads(p.stdout)
-    except ValueError:
-        result = {"result": "", "parse_error": p.stdout[:500]}
+    result, tools, init = parse_stream(p.stdout)
+    if result is None:
+        result = {"result": "", "parse_error": p.stdout[-500:]}
     version = subprocess.run([a.claude_cmd, "--version"], capture_output=True, text=True).stdout.strip()
     record = {"target": a.target, "arm": a.arm, "split": split, "model": MODEL, "effort": "default",
               "rea_version": REA_VERSION if a.arm == "rea" else None, "claude_version": version,
               "machine": f"{platform.system()} {platform.release()} {platform.machine()}",
               "date": time.strftime("%Y-%m-%d %H:%M"), "wall_s": wall, "exit": p.returncode,
-              "stderr_tail": p.stderr[-500:], "raw": result}
+              "stderr_tail": p.stderr[-500:], "tools_used": tools,
+              "mcp_servers": (init or {}).get("mcp_servers"),
+              "rea_tools_available": sum(1 for t in (init or {}).get("tools", []) if str(t).startswith("mcp__rea")),
+              "raw": result}
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(record, indent=1))
     shutil.rmtree(work, ignore_errors=True)
