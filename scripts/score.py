@@ -28,8 +28,8 @@ def score(target, text, keys=None):
     body = text
     found = {}
     for fact in key["required"]:
-        found[fact["id"]] = any(re.search(p, body, re.I | re.S) for p in fact["any_of"])
-    wrong = [p for p in key["forbidden"] if re.search(p, body, re.I | re.S)]
+        found[fact["id"]] = any(re.search(p, body, re.I) for p in fact["any_of"])
+    wrong = [p for p in key["forbidden"] if re.search(p, body, re.I)]
     conf, cnd = parse_footer(text)
     frac = sum(found.values()) / len(found)
     grade = "wrong" if wrong else "right" if frac == 1 else "partial" if frac >= 0.5 else "wrong"

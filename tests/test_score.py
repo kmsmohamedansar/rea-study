@@ -29,4 +29,22 @@ class T(unittest.TestCase):
         for t in k["targets"]: self.assertTrue(k["targets"][t]["required"])
         sp = json.loads((pathlib.Path(__file__).resolve().parent.parent / "targets/split.json").read_text())
         self.assertEqual(set(sp["dev"]) | set(sp["heldout"]), set(k["targets"])); self.assertFalse(set(sp["dev"]) & set(sp["heldout"]))
+
+# Regression cases found by reading real answers (2026-10-19). Skipped when the key is absent.
+from score import score as _s
+@unittest.skipUnless(HAVE_KEYS, 'answer key is not on this machine')
+class Regress(unittest.TestCase):
+    def facts(self, t, text): return _s(t, text)["found"]
+    def test_u32_counts_as_four_byte_length(self):
+        self.assertTrue(self.facts("t03", "payload length, a little-endian u32, max 4096")["len4"])
+    def test_split_at_equals_counts_as_key_value(self):
+        self.assertTrue(self.facts("t09", "the line is split at the first `=` into a key and a value")["keyval"])
+    def test_stray_five_does_not_credit_max_attempts(self):
+        self.assertFalse(self.facts("t02", "It is a try loop with exponential backoff.\nIt waits 5 seconds.")["max5"])
+    def test_address_does_not_credit_sum_rule(self):
+        self.assertFalse(self.facts("t01", "Code is at address 0x1000, it loads the key.")["sum_rule"])
+    def test_number_in_an_address_does_not_credit_groups(self):
+        self.assertFalse(self.facts("t01", "entry at 0x100004944 reads argv")["format_groups"])
+    def test_time_units_count_as_window(self):
+        self.assertTrue(self.facts("t06", "at most 5 events per 60 time units")["window60"])
 unittest.main() if __name__ == "__main__" else None

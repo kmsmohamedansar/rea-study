@@ -1,0 +1,651 @@
+{
+ "rows": [
+  {
+   "target": "t01",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "format_groups": true,
+    "letters_only": true,
+    "sum_rule": true,
+    "mod7": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "none",
+   "split": "dev",
+   "wall_s": 25.7,
+   "turns": 3,
+   "cost_usd": 0.0717762,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 0,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t02",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "max5": true,
+    "start200": true,
+    "doubles": true,
+    "cap2000": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.95,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "none",
+   "split": "dev",
+   "wall_s": 23.9,
+   "turns": 4,
+   "cost_usd": 0.07484859999999999,
+   "tools_used": {
+    "Bash": 3
+   },
+   "rea_tools_available": 0,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t03",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "magic": true,
+    "version2": true,
+    "len_le": true,
+    "len4": true,
+    "max4096": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "none",
+   "split": "dev",
+   "wall_s": 17.8,
+   "turns": 3,
+   "cost_usd": 0.0690172,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 0,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t05",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "xor": true,
+    "key5a": true,
+    "decoded": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.96,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "none",
+   "split": "dev",
+   "wall_s": 18.8,
+   "turns": 4,
+   "cost_usd": 0.0659428,
+   "tools_used": {
+    "Bash": 3
+   },
+   "rea_tools_available": 0,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t06",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "limit5": true,
+    "window60": true,
+    "timestamps": true,
+    "denied": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.88,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "none",
+   "split": "dev",
+   "wall_s": 24.4,
+   "turns": 3,
+   "cost_usd": 0.071131,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 0,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t08",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "order": true,
+    "data_repeat": true,
+    "exit3": true,
+    "incomplete": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "none",
+   "split": "dev",
+   "wall_s": 18.7,
+   "turns": 5,
+   "cost_usd": 0.081361,
+   "tools_used": {
+    "Bash": 3
+   },
+   "rea_tools_available": 0,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t09",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "file": true,
+    "keyval": true,
+    "comment": true,
+    "timeout": true,
+    "default30": true,
+    "clamp300": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "none",
+   "split": "dev",
+   "wall_s": 20.5,
+   "turns": 3,
+   "cost_usd": 0.0731208,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 0,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t01",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "format_groups": true,
+    "letters_only": true,
+    "sum_rule": true,
+    "mod7": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea",
+   "split": "dev",
+   "wall_s": 25.4,
+   "turns": 3,
+   "cost_usd": 0.0897854,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t02",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "max5": true,
+    "start200": true,
+    "doubles": true,
+    "cap2000": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea",
+   "split": "dev",
+   "wall_s": 40.9,
+   "turns": 4,
+   "cost_usd": 0.0964386,
+   "tools_used": {
+    "Bash": 3
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t03",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "magic": true,
+    "version2": true,
+    "len_le": true,
+    "len4": true,
+    "max4096": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea",
+   "split": "dev",
+   "wall_s": 20.4,
+   "turns": 3,
+   "cost_usd": 0.0883366,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t05",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "xor": true,
+    "key5a": true,
+    "decoded": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.95,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea",
+   "split": "dev",
+   "wall_s": 15.7,
+   "turns": 4,
+   "cost_usd": 0.0817532,
+   "tools_used": {
+    "Bash": 3
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t06",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "limit5": true,
+    "window60": true,
+    "timestamps": true,
+    "denied": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea",
+   "split": "dev",
+   "wall_s": 21.1,
+   "turns": 3,
+   "cost_usd": 0.0903428,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t08",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "order": true,
+    "data_repeat": true,
+    "exit3": true,
+    "incomplete": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea",
+   "split": "dev",
+   "wall_s": 16.7,
+   "turns": 3,
+   "cost_usd": 0.0897606,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t09",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "file": true,
+    "keyval": true,
+    "comment": true,
+    "timeout": true,
+    "default30": true,
+    "clamp300": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea",
+   "split": "dev",
+   "wall_s": 19.4,
+   "turns": 3,
+   "cost_usd": 0.09101519999999999,
+   "tools_used": {
+    "Bash": 2
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t01",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "format_groups": true,
+    "letters_only": true,
+    "sum_rule": true,
+    "mod7": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea-directed",
+   "split": "dev",
+   "wall_s": 23.6,
+   "turns": 8,
+   "cost_usd": 0.1483102,
+   "tools_used": {
+    "ToolSearch": 1,
+    "mcp__rea__open_binary": 1,
+    "mcp__rea__binary_overview": 1,
+    "mcp__rea__list_strings": 1,
+    "mcp__rea__list_procedures": 1,
+    "mcp__rea__procedure_pseudo_code": 1,
+    "mcp__rea__close_binary": 1
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t02",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "max5": true,
+    "start200": true,
+    "doubles": true,
+    "cap2000": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea-directed",
+   "split": "dev",
+   "wall_s": 42.4,
+   "turns": 10,
+   "cost_usd": 0.1826552,
+   "tools_used": {
+    "ToolSearch": 2,
+    "mcp__rea__open_binary": 1,
+    "mcp__rea__binary_overview": 1,
+    "mcp__rea__list_strings": 1,
+    "mcp__rea__list_procedures": 1,
+    "mcp__rea__procedure_pseudo_code": 1,
+    "mcp__rea__read_bytes": 1,
+    "mcp__rea__procedure_assembly": 1
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t03",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "magic": true,
+    "version2": true,
+    "len_le": true,
+    "len4": true,
+    "max4096": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea-directed",
+   "split": "dev",
+   "wall_s": 32.5,
+   "turns": 8,
+   "cost_usd": 0.1678626,
+   "tools_used": {
+    "ToolSearch": 1,
+    "mcp__rea__open_binary": 1,
+    "mcp__rea__binary_overview": 1,
+    "mcp__rea__list_strings": 1,
+    "mcp__rea__list_procedures": 1,
+    "mcp__rea__procedure_pseudo_code": 1,
+    "mcp__rea__procedure_assembly": 1
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t05",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "xor": true,
+    "key5a": true,
+    "decoded": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.95,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea-directed",
+   "split": "dev",
+   "wall_s": 35.2,
+   "turns": 7,
+   "cost_usd": 0.1260524,
+   "tools_used": {
+    "ToolSearch": 1,
+    "mcp__rea__open_binary": 1,
+    "mcp__rea__binary_overview": 1,
+    "mcp__rea__list_strings": 1,
+    "mcp__rea__procedure_pseudo_code": 1,
+    "mcp__rea__read_bytes": 1
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t06",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "limit5": true,
+    "window60": true,
+    "timestamps": true,
+    "denied": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea-directed",
+   "split": "dev",
+   "wall_s": 31.4,
+   "turns": 7,
+   "cost_usd": 0.1557374,
+   "tools_used": {
+    "ToolSearch": 1,
+    "mcp__rea__open_binary": 1,
+    "mcp__rea__list_strings": 1,
+    "mcp__rea__list_procedures": 1,
+    "mcp__rea__procedure_pseudo_code": 1,
+    "mcp__rea__procedure_assembly": 1
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t08",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "order": true,
+    "data_repeat": true,
+    "exit3": true,
+    "incomplete": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.88,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea-directed",
+   "split": "dev",
+   "wall_s": 25.1,
+   "turns": 6,
+   "cost_usd": 0.133874,
+   "tools_used": {
+    "ToolSearch": 1,
+    "mcp__rea__open_binary": 1,
+    "mcp__rea__list_strings": 1,
+    "mcp__rea__list_procedures": 1,
+    "mcp__rea__procedure_pseudo_code": 1
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "t09",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "file": true,
+    "keyval": true,
+    "comment": true,
+    "timeout": true,
+    "default30": true,
+    "clamp300": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.93,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "arm": "rea-directed",
+   "split": "dev",
+   "wall_s": 30.2,
+   "turns": 9,
+   "cost_usd": 0.2138014,
+   "tools_used": {
+    "ToolSearch": 1,
+    "mcp__rea__open_binary": 1,
+    "mcp__rea__binary_overview": 1,
+    "mcp__rea__list_strings": 1,
+    "mcp__rea__procedure_pseudo_code": 2,
+    "mcp__rea__list_procedures": 1,
+    "mcp__rea__procedure_assembly": 1
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  }
+ ],
+ "summary": {
+  "none": {
+   "n": 7,
+   "right": 7,
+   "partial": 0,
+   "wrong": 0,
+   "failed": 0,
+   "mean_fraction": 1.0,
+   "footer_missing": 0,
+   "not_right_admitted_unknown": 0,
+   "not_right_total": 0,
+   "mean_conf_right": 0.917,
+   "mean_conf_not_right": null,
+   "runs_that_called_rea": 0,
+   "runs_with_rea_available": 0,
+   "mean_wall_s": 21.4,
+   "mean_turns": 3.571,
+   "total_cost_usd": 0.51
+  },
+  "rea": {
+   "n": 7,
+   "right": 7,
+   "partial": 0,
+   "wrong": 0,
+   "failed": 0,
+   "mean_fraction": 1.0,
+   "footer_missing": 0,
+   "not_right_admitted_unknown": 0,
+   "not_right_total": 0,
+   "mean_conf_right": 0.929,
+   "mean_conf_not_right": null,
+   "runs_that_called_rea": 0,
+   "runs_with_rea_available": 7,
+   "mean_wall_s": 22.8,
+   "mean_turns": 3.286,
+   "total_cost_usd": 0.63
+  },
+  "rea-directed": {
+   "n": 7,
+   "right": 7,
+   "partial": 0,
+   "wrong": 0,
+   "failed": 0,
+   "mean_fraction": 1.0,
+   "footer_missing": 0,
+   "not_right_admitted_unknown": 0,
+   "not_right_total": 0,
+   "mean_conf_right": 0.917,
+   "mean_conf_not_right": null,
+   "runs_that_called_rea": 7,
+   "runs_with_rea_available": 7,
+   "mean_wall_s": 31.486,
+   "mean_turns": 7.857,
+   "total_cost_usd": 1.13
+  }
+ }
+}
