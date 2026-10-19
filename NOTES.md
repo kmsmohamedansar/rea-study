@@ -89,3 +89,8 @@ Plan drafted in HANDOFF.md. Nothing measured yet.
 - Stated confidence ranged 0.88 to 0.96 on every run and every answer was right, so calibration cannot be assessed on dev: there are no wrong answers to compare against.
 - Weakness found: `admitted_unknown` is true in 21 of 21 answers because every answer lists some `could_not_determine` item (usually generic: purpose, program name, "not run"). The metric as written does not discriminate. Needs a sharper definition before the held-out run (e.g. only the key's `undeterminable` items count).
 - What these results do and do not say: on 7 small, easy targets the agent with Bash tools is already at the ceiling, so there is no accuracy difference to find. Nothing here shows REA helps or does not help on harder targets.
+
+### 2026-10-19: phase 2 planned (owner chose option 2: harder targets before the held-out run)
+- Drafted `docs/phase2-plan.md`: 8 core targets (5 written for the study, 3 open source) plus 1 Go target cross-built here, 1 optional Rust target. Split fixed in the plan before any build. Phase 1 held-out (t04, t07, t10) stays unrun until the end.
+- Fix planned for the "admitted uncertainty" measure (see the dev sweep note above) before it is used again.
+- Nothing built or run for phase 2 yet. Owner approves targets and keys first.
