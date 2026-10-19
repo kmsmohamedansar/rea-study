@@ -95,7 +95,7 @@ def main(argv=None, claude="claude"):
     if a.target not in keys["split"]["dev"] + keys["split"]["heldout"]:
         sys.exit(f"unknown target {a.target}")
     split, out = check_allowed(a.target, a.arm, a.heldout, keys, pathlib.Path(a.raw_dir))
-    binary = next(iter((ROOT / "targets" / "bin").glob(f"{a.target}_*")), None)
+    binary = next(iter((ROOT / "targets" / "bin").glob(f"{SAME_BINARY.get(a.target, a.target)}_*")), None)
     if binary is None:
         sys.exit("binary missing: run scripts/build_targets.sh on this machine first")
     work = pathlib.Path(tempfile.mkdtemp(prefix="reastudy-"))

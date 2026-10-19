@@ -133,3 +133,8 @@ Plan drafted in HANDOFF.md. Nothing measured yet.
 - Caveat to resolve before reading the result: if the Mac has Go installed, the `none` arm can run `go version -m` on the binary and get everything in one command. Same machine for all arms, so it is fair, but it changes what a result means. Owner to report `which go` output.
 - Plan: 3 runs (sweep.py), then an eye audit of the matched text, same as the other targets.
 - 2026-10-19, owner's Mac: `which go` finds nothing ("go not found"). So the `none` arm cannot use `go version -m` on the p09b binary; it has only generic tools (strings, otool and similar). Resolves the caveat above.
+
+### 2026-10-19: bug in the phase 2b change, found when the owner ran it
+- The first sweep of p09b on the Mac failed 3 of 3 with "binary missing". Cause: my edit that maps p09b to p09's binary did not match the real text of the line in run.py, so it silently changed nothing, and p09b looked for a binary named `p09b_*`. The same failure had shown up on my own dry run, and I wrongly put it down to a cleaned-out container instead of checking.
+- My test of that change only checked that the mapping table existed, not that run.py used it. Fixed the line (it now asserts that its search text is present before replacing, as the edit script did here) and added a test that runs `run.py p09b ... --dry-run` and requires success with both sentences in the prompt. Checked that the test fails when the bug is put back. 48 tests pass.
+- Cost: nothing lost. All three runs failed before calling the model, so no usage was spent and no results exist. Owner's working copy also lists the moved sources as "deleted"; expected and harmless.

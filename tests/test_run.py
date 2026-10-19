@@ -113,6 +113,14 @@ class Phase2b(unittest.TestCase):
     def test_sentence_leaks_nothing(self):
         for word in ("go1", "uuid", "pflag", "golang", "1.24", "module path"):
             self.assertNotIn(word, run.BUILD_INFO.lower())
+    def test_p09b_really_finds_the_p09_binary(self):
+        # run.main prints the command in a dry run and exits 0 only if it found a binary (it exits with a message otherwise)
+        import io, contextlib
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = run.main(["p09b", "rea-directed", "--dry-run"])
+        self.assertEqual(code, 0)
+        self.assertIn(run.BUILD_INFO, buf.getvalue()); self.assertIn(run.DIRECTED, buf.getvalue())
     def test_p09b_uses_p09_binary_and_is_in_dev(self):
         self.assertEqual(run.SAME_BINARY["p09b"], "p09")
         self.assertIn("p09b", json.loads((ROOT / "targets" / "split.json").read_text())["dev"])
