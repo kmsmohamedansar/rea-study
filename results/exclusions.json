@@ -1,0 +1,6 @@
+[
+  {"target": "p08", "arm": "none", "repeat": 3,
+   "reason": "Stalled about 12 minutes: the agent ran the program without piping input and it waited on the terminal until a timeout. The answer is valid but wall time (733.8 s) is not agent work (API time 31 s) and the turn count (1) is inconsistent with 7 tool calls. Replaced by repeat 4 under the fixed harness (stdin closed)."},
+  {"target": "p08", "arm": "rea", "repeat": 3,
+   "reason": "Same stall (733.4 s). The final message recorded was the agent's reply to a stale background notification, not its answer, so the record does not hold the answer (harness kept only the last message at the time). Replaced by repeat 4 under the fixed harness (stdin closed, every message kept)."}
+]

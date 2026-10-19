@@ -129,4 +129,21 @@ class P09b(unittest.TestCase):
         self.assertNotEqual(_s("p09b", self.A.replace("go1.24.7", "go1.22"))["grade"], "right")
     def test_no_build_info_is_wrong(self):
         self.assertEqual(_s("p09b", "A Go program that prints a greeting and a UUID.")["grade"], "wrong")
+@unittest.skipUnless(HAVE_KEYS, 'answer key is not on this machine')
+class RepairsFromTheRepeats(unittest.TestCase):
+    """Wording found in real answers to repeat runs (2026-10-19); all were false penalties."""
+    def test_exit_code_in_a_table_row(self):
+        self.assertTrue(_s("p07", "| Condition | Output | Exit code |\n| Parse error | `error at position %d` | 1 |")["found"]["exit1"])
+        self.assertFalse(_s("p07", "| Condition | Output |\n| Success | prints 1.5 | 0 |")["found"]["exit1"])
+    def test_key_value_described_as_text_before_and_after(self):
+        self.assertTrue(_s("t09", "It replaces the = with a NUL. The text before it is the key, and the text after it is the value.")["found"]["keyval"])
+    def test_countdown_with_and(self):
+        self.assertTrue(_s("p01", "Stdout is `720`, `3`, `2` and `1`.")["found"]["countdown"])
+    def test_opcode_set_accepts_sum_product_and_loop_description(self):
+        a = ("A stack machine. Opcodes: 0 halt, 1 push n, 2 pop two and push their sum, 3 a-b, 4 their product, "
+             "6 t: if the popped value is non-zero, jump to t, 7 print. The loop does duplicate, print, subtract 1.")
+        self.assertTrue(_s("p01", a)["found"]["opcode_set"])
+    def test_opcode_set_still_fails_when_the_jump_opcode_is_never_described(self):
+        a = "A stack machine. halt, push n, sum, a-b, product, print. The loop does duplicate, print, subtract 1 and repeats."
+        self.assertFalse(_s("p01", a)["found"]["opcode_set"])
 unittest.main() if __name__ == "__main__" else None

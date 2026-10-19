@@ -44,8 +44,8 @@ def build_cmd(arm, prompt, mcp_file, claude="claude"):
     return cmd
 
 def parse_stream(text):
-    """stream-json: one event per line. Returns (result_event, tool_counts, init_event)."""
-    result, init, tools = None, None, {}
+    """stream-json: one event per line. Returns (result_event, tool_counts, init_event, assistant_text_messages)."""
+    result, init, tools, texts = None, None, {}, []
     for line in text.splitlines():
         try:
             ev = json.loads(line)
@@ -57,9 +57,11 @@ def parse_stream(text):
             for block in (ev.get("message") or {}).get("content") or []:
                 if isinstance(block, dict) and block.get("type") == "tool_use":
                     tools[block.get("name", "?")] = tools.get(block.get("name", "?"), 0) + 1
+                elif isinstance(block, dict) and block.get("type") == "text" and block.get("text"):
+                    texts.append(block["text"])
         elif ev.get("type") == "result":
             result = ev
-    return result, tools, init
+    return result, tools, init, texts
 
 SKILL_SRC = ROOT / "vendor" / "rea-skill" / "reverse-engineer-anything"
 
@@ -109,9 +111,9 @@ def main(argv=None, claude="claude"):
     if a.dry_run:
         print(" ".join(map(str, cmd))); return 0
     t0 = time.time()
-    p = subprocess.run(cmd, cwd=work, capture_output=True, text=True)
+    p = subprocess.run(cmd, cwd=work, capture_output=True, text=True, stdin=subprocess.DEVNULL)
     wall = round(time.time() - t0, 1)
-    result, tools, init = parse_stream(p.stdout)
+    result, tools, init, texts = parse_stream(p.stdout)
     if result is None:
         result = {"result": "", "parse_error": p.stdout[-500:]}
     version = subprocess.run([a.claude_cmd, "--version"], capture_output=True, text=True).stdout.strip()
@@ -119,7 +121,7 @@ def main(argv=None, claude="claude"):
               "rea_version": REA_VERSION if a.arm in REA_ARMS else None, "claude_version": version,
               "machine": f"{platform.system()} {platform.release()} {platform.machine()}",
               "date": time.strftime("%Y-%m-%d %H:%M"), "wall_s": wall, "exit": p.returncode,
-              "stderr_tail": p.stderr[-500:], "tools_used": tools,
+              "stderr_tail": p.stderr[-500:], "tools_used": tools, "assistant_texts": texts, "stdin": "closed",
               "mcp_servers": (init or {}).get("mcp_servers"),
               "skills_loaded": (init or {}).get("skills"),
               "rea_tools_available": sum(1 for t in (init or {}).get("tools", []) if str(t).startswith("mcp__rea")),

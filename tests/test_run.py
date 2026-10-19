@@ -125,6 +125,51 @@ class Phase2b(unittest.TestCase):
         self.assertEqual(run.SAME_BINARY["p09b"], "p09")
         self.assertIn("p09b", json.loads((ROOT / "targets" / "split.json").read_text())["dev"])
 
+class Stdin(unittest.TestCase):
+    def test_agent_run_gets_closed_stdin_so_programs_reading_it_see_eof(self):
+        from unittest import mock
+        seen = {}
+        def fake_run(cmd, **kw):
+            seen.update(kw)
+            class P: stdout = ""; stderr = ""; returncode = 0
+            return P()
+        with mock.patch.object(run.subprocess, "run", side_effect=fake_run):
+            tmp = pathlib.Path(tempfile.mkdtemp())
+            run.main(["t01", "none", "--raw-dir", str(tmp)])
+        self.assertIs(seen.get("stdin"), run.subprocess.DEVNULL)
+
+class AnswerIsLastMessageWithFooter(unittest.TestCase):
+    FOOT = '{"confidence": 0.9, "could_not_determine": []}'
+    def test_stream_keeps_every_assistant_text(self):
+        lines = "\n".join(json.dumps(e) for e in [
+            {"type": "assistant", "message": {"content": [{"type": "text", "text": "the real answer\n" + self.FOOT}]}},
+            {"type": "assistant", "message": {"content": [{"type": "text", "text": "reply to a stale notification"}]}},
+            {"type": "result", "result": "reply to a stale notification"}])
+        result, tools, init, texts = run.parse_stream(lines)
+        self.assertEqual(len(texts), 2)
+    def test_late_junk_message_does_not_replace_the_answer(self):
+        rec = {"raw": {"result": "reply to a stale notification"}, "assistant_texts": ["the real answer\n" + self.FOOT, "reply to a stale notification"]}
+        text, earlier = results.answer_text(rec)
+        self.assertTrue(earlier); self.assertIn("the real answer", text)
+    def test_normal_run_uses_the_final_result(self):
+        rec = {"raw": {"result": "answer\n" + self.FOOT}, "assistant_texts": ["thinking out loud", "answer\n" + self.FOOT]}
+        self.assertEqual(results.answer_text(rec), ("answer\n" + self.FOOT, False))
+    def test_old_records_without_texts_fall_back_to_the_final_result(self):
+        self.assertEqual(results.answer_text({"raw": {"result": "x"}}), ("x", False))
+
+class Exclusions(unittest.TestCase):
+    @NEEDS_KEY
+    def test_excluded_run_is_left_out_of_the_tables_but_listed(self):
+        tmp = pathlib.Path(tempfile.mkdtemp()); raw = tmp / "raw"
+        fake = tmp / "fake-claude"; fake.write_text(FAKE); fake.chmod(0o755)
+        for rep in ("1", "2"):
+            run.main(["t01", "none", "--repeat", rep, "--claude-cmd", str(fake), "--raw-dir", str(raw)])
+        ex = tmp / "ex.json"; ex.write_text(json.dumps([{"target": "t01", "arm": "none", "repeat": 2, "reason": "stalled"}]))
+        out = tmp / "out"; results.main(["--raw-dir", str(raw), "--out-dir", str(out), "--excl", str(ex)])
+        md = (out / "summary.md").read_text()
+        self.assertIn("## excluded runs", md); self.assertIn("stalled", md)
+        self.assertEqual(json.loads((out / "dev.json").read_text())["summary"]["none"]["n"], 1)
+
 class Repeats(unittest.TestCase):
     def setUp(self):
         self.tmp = pathlib.Path(tempfile.mkdtemp()); self.raw = self.tmp / "raw"
