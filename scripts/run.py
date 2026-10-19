@@ -4,7 +4,7 @@
   python3 scripts/run.py t01 rea
   python3 scripts/run.py t04 rea --heldout     (held-out: refused unless --heldout, refused a second time)
 
-Arms differ only in the tool: 'rea' adds REA's MCP server (pinned version). Same model, same
+Arms differ only in the tool: 'rea' adds REA's MCP server (pinned version) and REA's own skill (vendor/rea-skill, copied into that run's folder only). Same model, same
 prompt, same built-in tools, same machine. Runs happen in an empty temp folder holding a copy of
 the binary named 'target', so this repo's CLAUDE.md and source are not in the working folder. The answer key (targets/keys.json) is not kept on the run machine.
 """
@@ -48,6 +48,14 @@ def parse_stream(text):
             result = ev
     return result, tools, init
 
+SKILL_SRC = ROOT / "vendor" / "rea-skill" / "reverse-engineer-anything"
+
+def prepare_workdir(work, arm, binary):
+    """Empty throwaway folder holding the binary. The REA arm also gets REA's own skill, here only."""
+    shutil.copy(binary, work / "target")
+    if arm == "rea":
+        shutil.copytree(SKILL_SRC, work / ".claude" / "skills" / "reverse-engineer-anything")
+
 def split_of(target, keys):
     return "heldout" if target in keys["split"]["heldout"] else "dev"
 
@@ -78,7 +86,7 @@ def main(argv=None, claude="claude"):
     if binary is None:
         sys.exit("binary missing: run scripts/build_targets.sh on this machine first")
     work = pathlib.Path(tempfile.mkdtemp(prefix="reastudy-"))
-    shutil.copy(binary, work / "target")
+    prepare_workdir(work, a.arm, binary)
     mcp_file = work / ".mcp-rea.json"
     mcp_file.write_text(json.dumps(REA_MCP))
     cmd = build_cmd(a.arm, load_prompt(str(work / "target")), mcp_file, a.claude_cmd)
@@ -97,6 +105,7 @@ def main(argv=None, claude="claude"):
               "date": time.strftime("%Y-%m-%d %H:%M"), "wall_s": wall, "exit": p.returncode,
               "stderr_tail": p.stderr[-500:], "tools_used": tools,
               "mcp_servers": (init or {}).get("mcp_servers"),
+              "skills_loaded": (init or {}).get("skills"),
               "rea_tools_available": sum(1 for t in (init or {}).get("tools", []) if str(t).startswith("mcp__rea")),
               "raw": result}
     out.parent.mkdir(parents=True, exist_ok=True)

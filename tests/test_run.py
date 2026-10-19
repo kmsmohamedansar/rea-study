@@ -32,6 +32,13 @@ class T(unittest.TestCase):
         self.assertEqual([x for x in r if x not in n], ["mcp__rea", "--mcp-config", "m.json"])
         self.assertIn("claude-sonnet-5-5", n); self.assertIn("--strict-mcp-config", n)
 
+    def test_skill_goes_to_rea_arm_only(self):
+        binary = next((ROOT / "targets" / "bin").glob("t01_*"))
+        for arm, expect in (("none", False), ("rea", True)):
+            w = pathlib.Path(tempfile.mkdtemp()); run.prepare_workdir(w, arm, binary)
+            self.assertTrue((w / "target").exists())
+            self.assertEqual((w / ".claude" / "skills" / "reverse-engineer-anything" / "SKILL.md").exists(), expect)
+
     def test_prompt_leaks_nothing(self):
         p = run.load_prompt("/x/target")
         self.assertIn("/x/target", p); self.assertIn("could_not_determine", p)
