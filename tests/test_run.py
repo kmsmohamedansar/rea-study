@@ -157,6 +157,38 @@ class AnswerIsLastMessageWithFooter(unittest.TestCase):
     def test_old_records_without_texts_fall_back_to_the_final_result(self):
         self.assertEqual(results.answer_text({"raw": {"result": "x"}}), ("x", False))
 
+class HeldOutRunner(unittest.TestCase):
+    def test_plan_is_only_held_out_targets_and_skips_done(self):
+        import heldout
+        raw = pathlib.Path(tempfile.mkdtemp())
+        held = json.loads((ROOT / "targets" / "split.json").read_text())["heldout"]
+        full = heldout.plan(raw)
+        self.assertEqual(len(full), len(held) * 3); self.assertEqual({t for t, _ in full}, set(held))
+        (raw / "heldout" / "rea").mkdir(parents=True); (raw / "heldout" / "rea" / "t04.json").write_text("{}")
+        self.assertEqual(len(heldout.plan(raw)), len(held) * 3 - 1)
+    def test_nothing_runs_without_the_explicit_flag(self):
+        import heldout, io, contextlib
+        from unittest import mock
+        raw = pathlib.Path(tempfile.mkdtemp())
+        with mock.patch.object(heldout.subprocess, "run") as m, contextlib.redirect_stdout(io.StringIO()) as out:
+            code = heldout.main(["--raw-dir", str(raw)])
+        self.assertEqual(code, 0); m.assert_not_called(); self.assertIn("Nothing run", out.getvalue())
+    def test_with_the_flag_every_run_is_marked_heldout_and_never_a_repeat(self):
+        import heldout, io, contextlib
+        from unittest import mock
+        raw = pathlib.Path(tempfile.mkdtemp())
+        class P: returncode = 0
+        with mock.patch.object(heldout.subprocess, "run", return_value=P()) as m, contextlib.redirect_stdout(io.StringIO()):
+            heldout.main(["--run-held-out-once", "--raw-dir", str(raw)])
+        self.assertEqual(m.call_count, 18)
+        for call in m.call_args_list:
+            cmd = call.args[0]
+            self.assertIn("--heldout", cmd); self.assertNotIn("--repeat", cmd)
+    def test_sweep_never_touches_held_out(self):
+        import sweep
+        held = set(json.loads((ROOT / "targets" / "split.json").read_text())["heldout"])
+        self.assertFalse({t for t, _, _ in sweep.plan(pathlib.Path(tempfile.mkdtemp()), 3)} & held)
+
 class Exclusions(unittest.TestCase):
     @NEEDS_KEY
     def test_excluded_run_is_left_out_of_the_tables_but_listed(self):
