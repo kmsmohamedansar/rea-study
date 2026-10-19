@@ -37,6 +37,6 @@ Plan drafted in HANDOFF.md. Nothing measured yet.
 - Effort is recorded as "default": the CLI does not report which level it applied.
 
 ### How to run on the Mac (owner)
-1. `./scripts/build_targets.sh`, then move the sources out of the folder: `mv targets/src ~/rea-study-src` (the comments in them are the answers).
+1. Move the sources out of the folder (their comments are the answers) and build from there: `mv targets/src ~/rea-study-src; SRC=~/rea-study-src ./scripts/build_targets.sh`.
 2. Install Ghidra and Node 22+; do NOT run `rea setup`. Confirm `npx -y rea-agents@6.7.0 mcp` starts.
 3. Run commands from inside the cloned folder. One dev target, both arms: `python3 scripts/run.py t01 none` then `python3 scripts/run.py t01 rea`; then read both answers by eye (`results/raw/dev/*/t01.json`, field `raw.result`) before running the rest. `results.py` needs the key, so it runs in the cloud session after you commit and push `results/raw`.
