@@ -40,3 +40,10 @@ Plan drafted in HANDOFF.md. Nothing measured yet.
 1. Move the sources out of the folder (their comments are the answers) and build from there: `mv targets/src ~/rea-study-src; SRC=~/rea-study-src ./scripts/build_targets.sh`.
 2. Install Ghidra and Node 22+; do NOT run `rea setup`. Confirm `npx -y rea-agents@6.7.0 mcp` starts.
 3. Run commands from inside the cloned folder. One dev target, both arms: `python3 scripts/run.py t01 none` then `python3 scripts/run.py t01 rea`; then read both answers by eye (`results/raw/dev/*/t01.json`, field `raw.result`) before running the rest. `results.py` needs the key, so it runs in the cloud session after you commit and push `results/raw`.
+
+### 2026-10-19: Mac build verified (owner's run)
+- Machine for all runs: Darwin 27.0.0 arm64 (the owner's Mac), Apple clang 21.0.0 (clang-2100.3.34.2).
+- First build used `-s`, which macOS's linker ignores ("ld: warning: -s is obsolete"), so the programs still carried their function names. Caught from the warnings, fixed by a separate `strip` step plus `codesign -s -` on Darwin.
+- After the fix, on the Mac: `nm targets/bin/t07_pwhash` lists only `__mh_execute_header` and the imported `_puts`; `strings ... | grep -i djb2` prints nothing; `t01_licence ABCD-EFGH-IJKD` prints `licence ok` (the re-signed program runs).
+- Sources live outside the repo on the Mac (`~/rea-study-src`), built with `SRC=~/rea-study-src ./scripts/build_targets.sh`.
+- Not done yet: Ghidra, Node 22+, REA launch check, first real run.
