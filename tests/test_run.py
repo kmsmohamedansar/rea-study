@@ -84,4 +84,15 @@ class T(unittest.TestCase):
 
     def test_unknown_target_and_missing_binary(self):
         with self.assertRaises(SystemExit): self.go("t99", "none")
+
+class Sweep(unittest.TestCase):
+    def test_plan_covers_dev_only_and_skips_done(self):
+        import sweep
+        raw = pathlib.Path(tempfile.mkdtemp())
+        full = sweep.plan(raw)
+        self.assertEqual(len(full), 7 * 3)
+        self.assertFalse({t for t, _ in full} & {"t04", "t07", "t10"})
+        (raw / "dev" / "rea").mkdir(parents=True); (raw / "dev" / "rea" / "t01.json").write_text("{}")
+        self.assertEqual(len(sweep.plan(raw)), 20); self.assertNotIn(("t01", "rea"), sweep.plan(raw))
+
 unittest.main() if __name__ == "__main__" else None

@@ -73,3 +73,8 @@ Plan drafted in HANDOFF.md. Nothing measured yet.
 - Phase 1 is now 10 targets x 3 arms = 30 runs.
 - Bug caught by a test while adding it: the first version of docs/prompt.md quoted the new sentence, and the harness builds the base prompt from all quoted lines, so it leaked into every arm. Fixed by showing it indented. A test now checks the sentence appears in `rea-directed` only and that all three arms use the same tools and flags.
 - Tests: 15 pass.
+
+### 2026-10-19: rea-directed arm works on t01 (owner's Mac)
+- `t01` rea-directed: exit 0, 37.4 s, 6 turns, nothing denied. `tools_used`: ToolSearch 1, `mcp__rea__open_binary`, `list_strings`, `list_procedures`, `procedure_assembly` (1 each). The agent had to find REA's tools through Claude Code's on-demand tool search (207 tools are deferred), which probably also dampens how often the `rea` arm picks REA. Answer correct (its text cites main at 0x100000460 and decodes the multiply-by-magic-constant modulo from the assembly).
+- It asked for assembly only, not decompiled code, so this run did not exercise the Mac-built Ghidra decompiler. Provider used is not recorded in the run file; Ghidra is the only provider configured, so presumably Ghidra, but that is an inference.
+- `scripts/sweep.py` runs every dev target through all three arms (21 runs), skipping saved ones. Held-out is never run by it.
