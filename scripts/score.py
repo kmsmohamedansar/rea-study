@@ -29,6 +29,7 @@ def score(target, text, keys=None):
     found = {}
     for fact in key["required"]:
         found[fact["id"]] = any(re.search(p, body, re.I) for p in fact["any_of"])
+    bonus = {f["id"]: any(re.search(p, body, re.I) for p in f["any_of"]) for f in key.get("bonus", [])}
     wrong = [p for p in key["forbidden"] if re.search(p, body, re.I)]
     conf, cnd = parse_footer(text)
     # A key may list real unknowns ("unknowns" patterns). Admitting one of THOSE is what counts, not
@@ -39,7 +40,7 @@ def score(target, text, keys=None):
     grade = "wrong" if wrong else "right" if frac == 1 else "partial" if frac >= 0.5 else "wrong"
     return {"target": target, "fraction": round(frac, 3), "grade": grade, "found": found,
             "forbidden_hits": wrong, "confidence": conf, "footer_ok": conf is not None,
-            "admitted_unknown": bool(cnd), "admitted_relevant": relevant}
+            "admitted_unknown": bool(cnd), "admitted_relevant": relevant, "bonus": bonus}
 
 if __name__ == "__main__":
     print(json.dumps(score(sys.argv[1], pathlib.Path(sys.argv[2]).read_text()), indent=1))
