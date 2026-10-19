@@ -132,3 +132,4 @@ Plan drafted in HANDOFF.md. Nothing measured yet.
 - Tests: 47 pass (sentence appears in every arm of p09b only, never in p09 or other targets; the directed arm keeps both sentences in order; the sentence leaks no answer words; wrong version is not right; no build info is wrong).
 - Caveat to resolve before reading the result: if the Mac has Go installed, the `none` arm can run `go version -m` on the binary and get everything in one command. Same machine for all arms, so it is fair, but it changes what a result means. Owner to report `which go` output.
 - Plan: 3 runs (sweep.py), then an eye audit of the matched text, same as the other targets.
+- 2026-10-19, owner's Mac: `which go` finds nothing ("go not found"). So the `none` arm cannot use `go version -m` on the p09b binary; it has only generic tools (strings, otool and similar). Resolves the caveat above.
