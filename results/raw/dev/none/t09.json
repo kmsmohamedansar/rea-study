@@ -1,0 +1,151 @@
+{
+ "target": "t09",
+ "arm": "none",
+ "split": "dev",
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "rea_version": null,
+ "claude_version": "2.1.295 (Claude Code)",
+ "machine": "Darwin 27.0.0 arm64",
+ "date": "2026-10-19 15:43",
+ "wall_s": 20.5,
+ "exit": 0,
+ "stderr_tail": "",
+ "tools_used": {
+  "Bash": 2
+ },
+ "mcp_servers": [],
+ "skills_loaded": [
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring",
+  "anthropic-skills:built-in-browser",
+  "anthropic-skills:chrome-browser",
+  "anthropic-skills:computer-use",
+  "anthropic-skills:deep-research",
+  "anthropic-skills:docs",
+  "anthropic-skills:docx",
+  "anthropic-skills:google-workspace",
+  "anthropic-skills:import-memory",
+  "anthropic-skills:morning",
+  "anthropic-skills:pdf",
+  "anthropic-skills:pptx",
+  "anthropic-skills:remove-ai-marks",
+  "anthropic-skills:skill-creator",
+  "anthropic-skills:xlsx"
+ ],
+ "rea_tools_available": 0,
+ "raw": {
+  "duration_api_ms": 19682,
+  "stop_reason": "end_turn",
+  "session_id": "a0795924-669a-4142-a646-6c94411dfa0b",
+  "total_cost_usd": 0.0731208,
+  "usage": {
+   "input_tokens": 6,
+   "cache_creation_input_tokens": 11837,
+   "cache_read_input_tokens": 49004,
+   "output_tokens": 1596,
+   "output_tokens_details": {
+    "thinking_tokens": 385
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 11837,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1313,
+     "cache_read_input_tokens": 19638,
+     "cache_creation_input_tokens": 2265,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 2265
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  },
+  "modelUsage": {
+   "claude-sonnet-5-5": {
+    "inputTokens": 6,
+    "outputTokens": 1596,
+    "cacheReadInputTokens": 49004,
+    "cacheCreationInputTokens": 11837,
+    "webSearchRequests": 0,
+    "costUSD": 0.0731208,
+    "contextWindow": 1000000,
+    "maxOutputTokens": 128000,
+    "thinkingTokens": 385,
+    "canonicalModel": "claude-sonnet-5-5",
+    "provider": "firstParty",
+    "costBasis": "list"
+   }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+   "spawned": 0,
+   "requested": {
+    "background": 0,
+    "foreground": 0,
+    "unset": 0
+   },
+   "started_in_background": 0,
+   "max_depth": 0,
+   "spawned_by_subagents": 0,
+   "completed": 0,
+   "failed": 0,
+   "killed": {
+    "parent": 0,
+    "user": 0,
+    "system": 0
+   },
+   "refused": {
+    "depth_limit": 0,
+    "concurrency_limit": 0,
+    "budget": 0
+   },
+   "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 3,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**What it is:** `t09` is a small arm64 Mach-O command-line tool that reads a config file and prints the effective timeout. I read the disassembly and did not run it. The only strings in the binary are `usage: t09 FILE`, `r`, `timeout` and `timeout=%d`.\n\n**Input**\n- It takes one argument, the path to a text file. It uses only `argv[1]`, and any extra arguments are ignored.\n- It reads the file line by line with `fgets` into a 256-byte buffer (0x100). A line longer than 255 characters is therefore split, and each leftover piece is parsed as its own line.\n\n**Parsing, per line**\n1. If the line contains `#`, the first `#` and everything after it is cut off.\n2. If the remaining text has no `=`, the line is skipped.\n3. The line is split at the first `=` into a key and a value.\n4. The key must be exactly `timeout`. The code compares the first 8 bytes against `\"timeout\\0\"`, so there is no whitespace trimming. `timeout =5`, ` timeout=5` and `timeouts=5` all fail to match. The key is also case-sensitive.\n5. The value is `atoi` of the text right after the `=`. Leading whitespace is skipped and trailing junk is ignored, since `atoi` does both.\n6. The value is then clamped:\n   - A value below 1 (zero, negative or non-numeric) becomes **30**.\n   - A value from 1 to 299 is kept as is.\n   - A value of 300 or more becomes **300**.\n7. If `timeout` appears several times, the last valid line wins.\n\n**Default:** The default is **30**. It applies when the file is empty, has no `timeout` line, or has an invalid value.\n\n**Outputs and exit codes**\n- **No argument:** prints `usage: t09 FILE` and exits with **2**.\n- **File can't be opened:** prints nothing and exits with **2**.\n- **File opened:** prints `timeout=<N>` followed by a newline, closes the file and exits with **0**.\n\n**Constants:** the default is 30 (0x1e), the maximum is 300 (0x12c), and the minimum valid value is 1. The comment character is `#` (0x23), the separator is `=` (0x3d), and the line buffer is 256 bytes.\n\n**What I could not determine from the program itself**\n- What calls it, and what happens to the printed timeout downstream. It only prints the value.\n- The units of the timeout. The code doesn't say whether it means seconds.\n- Why the cap is 300, or what the name `t09` refers to.\n- I did not run it, so the clamping and parsing rules come from reading the disassembly. I did not check them against real output.\n\n{\"confidence\": 0.9, \"could_not_determine\": [\"units of timeout\", \"caller/consumer of the output\", \"purpose of t09 name and rationale for 30/300 limits\", \"behavior not confirmed by dynamic execution\"]}",
+  "ttft_ms": 2533,
+  "type": "result",
+  "duration_ms": 19845,
+  "uuid": "32fe1295-28f7-4ee3-b94a-d67cd7238647",
+  "ttft_stream_ms": 1385,
+  "time_to_request_ms": 27,
+  "first_content_frame_ms": 1385,
+  "queued_turn_count": 0,
+  "result_index": 0
+ }
+}
