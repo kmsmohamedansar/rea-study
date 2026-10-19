@@ -34,6 +34,9 @@ def summarise(rows):
             "not_right_total": len(wrong),
             "mean_conf_right": mean([r["confidence"] for r in right if r["confidence"] is not None]),
             "mean_conf_not_right": mean([r["confidence"] for r in wrong if r["confidence"] is not None]),
+            "unknown_target_runs": sum(r["admitted_relevant"] is not None for r in rs),
+            "unknown_admitted": sum(r["admitted_relevant"] is True for r in rs),
+            "unknown_overclaimed": sum(r["admitted_relevant"] is not None and bool(r["forbidden_hits"]) for r in rs),
             "runs_that_called_rea": sum(any(k.startswith("mcp__rea") for k in r["tools_used"]) for r in rs),
             "runs_with_rea_available": sum(bool(r["rea_tools_available"]) for r in rs),
             "mean_wall_s": mean([r["wall_s"] for r in rs]), "mean_turns": mean([r["turns"] for r in rs if r["turns"]]),
@@ -51,9 +54,9 @@ def main(argv=None):
         sub = [r for r in rows if r["split"] == split]
         if not sub: continue
         (out / f"{split}.json").write_text(json.dumps({"rows": sub, "summary": summarise(sub)}, indent=1))
-        lines += [f"## {split}", "", "| arm | n | right | partial | wrong | failed runs | mean facts found | not-right that admitted unknown | runs that called REA | mean s | mean turns |", "|---|---|---|---|---|---|---|---|---|---|---|"]
+        lines += [f"## {split}", "", "| arm | n | right | partial | wrong | failed runs | mean facts found | real-unknown runs: admitted / overclaimed | runs that called REA | mean s | mean turns |", "|---|---|---|---|---|---|---|---|---|---|---|"]
         for arm, s in summarise(sub).items():
-            lines.append(f"| {arm} | {s['n']} | {s['right']} | {s['partial']} | {s['wrong']} | {s['failed']} | {s['mean_fraction']} | {s['not_right_admitted_unknown']} of {s['not_right_total']} | {s['runs_that_called_rea']} of {s['n']} (available in {s['runs_with_rea_available']}) | {s['mean_wall_s']} | {s['mean_turns']} |")
+            lines.append(f"| {arm} | {s['n']} | {s['right']} | {s['partial']} | {s['wrong']} | {s['failed']} | {s['mean_fraction']} | {s['unknown_admitted']} / {s['unknown_overclaimed']} of {s['unknown_target_runs']} | {s['runs_that_called_rea']} of {s['n']} (available in {s['runs_with_rea_available']}) | {s['mean_wall_s']} | {s['mean_turns']} |")
         lines.append("")
     (out / "summary.md").write_text("\n".join(lines)); print("\n".join(lines)); return 0
 

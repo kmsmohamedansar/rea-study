@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 targets/keys.v1.json
 targets/keys.v2.json
+targets/keys.v3.json

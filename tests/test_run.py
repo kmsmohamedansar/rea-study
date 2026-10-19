@@ -90,9 +90,11 @@ class Sweep(unittest.TestCase):
         import sweep
         raw = pathlib.Path(tempfile.mkdtemp())
         full = sweep.plan(raw)
-        self.assertEqual(len(full), 7 * 3)
-        self.assertFalse({t for t, _ in full} & {"t04", "t07", "t10"})
+        dev = json.loads((ROOT / "targets" / "split.json").read_text())["dev"]
+        self.assertEqual(len(full), len(dev) * 3)
+        held = set(json.loads((ROOT / "targets" / "split.json").read_text())["heldout"])
+        self.assertFalse({t for t, _ in full} & held)
         (raw / "dev" / "rea").mkdir(parents=True); (raw / "dev" / "rea" / "t01.json").write_text("{}")
-        self.assertEqual(len(sweep.plan(raw)), 20); self.assertNotIn(("t01", "rea"), sweep.plan(raw))
+        self.assertEqual(len(sweep.plan(raw)), len(full) - 1); self.assertNotIn(("t01", "rea"), sweep.plan(raw))
 
 unittest.main() if __name__ == "__main__" else None

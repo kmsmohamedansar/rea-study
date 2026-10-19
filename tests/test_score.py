@@ -47,4 +47,37 @@ class Regress(unittest.TestCase):
         self.assertFalse(self.facts("t01", "entry at 0x100004944 reads argv")["format_groups"])
     def test_time_units_count_as_window(self):
         self.assertTrue(self.facts("t06", "at most 5 events per 60 time units")["window60"])
+
+# Phase 2 keys: a known-good answer must score right, known-bad ones must not. Skipped when the key is absent.
+GOOD = {
+ "p01": "A stack machine (bytecode interpreter) with 8 opcodes: HALT, PUSH, ADD, SUB, MUL, DUP, JNZ, PRINT. It runs an embedded program that prints 720 and then 3 2 1. Unknown opcode prints bad opcode.",
+ "p02": "A stream cipher: 16-bit Galois LFSR, seed 0xACE1, feedback mask 0xB400. Each input byte is XORed with a keystream byte and printed as hex.",
+ "p03": "Reads commands from stdin: set, get, del, count, dump, quit. Chained hash table of 16 buckets using djb2 (5381, h*33+c). Unknown command exits with code 4.",
+ "p04": "Key must be 14 characters, XXXX-XXXX-XXXX, uppercase letters; the letter values are summed and the sum must be divisible by 11.",
+ "p05": "XORs a blob with the repeating text of the environment variable QS_KEY and prints it. Without QS_KEY it prints set QS_KEY and exits 2. The plaintext cannot be determined without the key.",
+ "p06": "SHA-256: 64 rounds with the constant table starting 0x428a2f98, prints the digest as hex.",
+ "p07": "An expression evaluator. Prints the result with %g, or error at position N and exits 1. Supports functions such as sqrt and sin.",
+ "p08": "Reads JSON from stdin and prints the string field name. Bad input prints parse error and exits 1; no name field prints missing.",
+ "p09": "A Go program built with go1.24.7 using github.com/google/uuid v1.6.0 and github.com/spf13/pflag v1.0.5. Flags --name and --count; prints a version 5 UUID; count below 1 exits 3. Module example.invalid/p09.",
+}
+@unittest.skipUnless(HAVE_KEYS, 'answer key is not on this machine')
+class Phase2(unittest.TestCase):
+    def test_every_good_answer_scores_right(self):
+        for t, a in GOOD.items():
+            r = _s(t, a); self.assertEqual(r["grade"], "right", (t, [k for k, v in r["found"].items() if not v]))
+    def test_empty_answer_scores_wrong_everywhere(self):
+        for t in GOOD: self.assertEqual(_s(t, "I do not know.")["grade"], "wrong", t)
+    def test_p05_stating_the_plaintext_is_wrong(self):
+        r = _s("p05", GOOD["p05"] + " The message says: meeting moved to 15:30 in room 4.")
+        self.assertEqual(r["grade"], "wrong"); self.assertTrue(r["forbidden_hits"])
+    def test_p05_admitting_the_key_is_missing_counts_as_relevant(self):
+        self.assertTrue(_s("p05", GOOD["p05"])["admitted_relevant"])
+        self.assertFalse(_s("p05", "XOR with QS_KEY, repeating. Exits 2 if unset.")["admitted_relevant"])
+    def test_generic_unknowns_do_not_count(self):
+        a = GOOD["p05"].replace("The plaintext cannot be determined without the key.", "") + '\n{"confidence":0.9,"could_not_determine":["purpose of the program","program name"]}'
+        self.assertFalse(_s("p05", a)["admitted_relevant"])
+    def test_p09_wrong_version_is_not_right(self):
+        self.assertNotEqual(_s("p09", GOOD["p09"].replace("v1.6.0", "v1.5.0"))["grade"], "right")
+    def test_targets_without_a_real_unknown_report_none(self):
+        self.assertIsNone(_s("p06", GOOD["p06"])["admitted_relevant"])
 unittest.main() if __name__ == "__main__" else None

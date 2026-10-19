@@ -1,5 +1,5 @@
 {
- "_note": "Which targets are dev and which are held out. Contains no answers. Fixed 2026-10-19 before any run.",
+ "_note": "Phase 1 split fixed 2026-10-11 to 2026-10-19; phase 2 additions fixed 2026-10-19 before any phase 2 run. Contains no answers.",
  "dev": [
   "t01",
   "t02",
@@ -7,12 +7,21 @@
   "t05",
   "t06",
   "t08",
-  "t09"
+  "t09",
+  "p01",
+  "p02",
+  "p04",
+  "p07",
+  "p09",
+  "p08"
  ],
  "heldout": [
   "t04",
   "t07",
-  "t10"
+  "t10",
+  "p03",
+  "p05",
+  "p06"
  ],
  "rule": "hard cases (hidden switch, one-way hash, standard algorithm) are spread so held-out holds one of each kind; fixed 2026-10-19 before any run"
 }
