@@ -182,6 +182,34 @@
    "model": "claude-sonnet-5-5"
   },
   {
+   "target": "p10",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "xor": true,
+    "envvar": true,
+    "djb2": true,
+    "exit2": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "admitted_relevant": true,
+   "bonus": {},
+   "arm": "none",
+   "split": "dev",
+   "wall_s": 24.2,
+   "turns": 4,
+   "cost_usd": 0.0739744,
+   "tools_used": {
+    "Bash": 3
+   },
+   "rea_tools_available": 0,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
    "target": "t01",
    "fraction": 1.0,
    "grade": "right",
@@ -568,6 +596,34 @@
     "mcp__rea__read_bytes": 8,
     "mcp__rea__xrefs": 1,
     "mcp__rea__search_strings": 1
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
+   "target": "p10",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "xor": true,
+    "envvar": true,
+    "djb2": true,
+    "exit2": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "admitted_relevant": true,
+   "bonus": {},
+   "arm": "rea",
+   "split": "dev",
+   "wall_s": 28.3,
+   "turns": 5,
+   "cost_usd": 0.10886939999999999,
+   "tools_used": {
+    "Bash": 4
    },
    "rea_tools_available": 207,
    "machine": "Darwin 27.0.0 arm64",
@@ -988,6 +1044,40 @@
    "model": "claude-sonnet-5-5"
   },
   {
+   "target": "p10",
+   "fraction": 1.0,
+   "grade": "right",
+   "found": {
+    "xor": true,
+    "envvar": true,
+    "djb2": true,
+    "exit2": true
+   },
+   "forbidden_hits": [],
+   "confidence": 0.9,
+   "footer_ok": true,
+   "admitted_unknown": true,
+   "admitted_relevant": true,
+   "bonus": {},
+   "arm": "rea-directed",
+   "split": "dev",
+   "wall_s": 33.5,
+   "turns": 10,
+   "cost_usd": 0.1730222,
+   "tools_used": {
+    "ToolSearch": 2,
+    "mcp__rea__open_binary": 1,
+    "mcp__rea__binary_overview": 1,
+    "mcp__rea__list_strings": 1,
+    "mcp__rea__list_procedures": 1,
+    "mcp__rea__procedure_pseudo_code": 1,
+    "mcp__rea__read_bytes": 2
+   },
+   "rea_tools_available": 207,
+   "machine": "Darwin 27.0.0 arm64",
+   "model": "claude-sonnet-5-5"
+  },
+  {
    "target": "t01",
    "fraction": 1.0,
    "grade": "right",
@@ -1227,8 +1317,8 @@
  ],
  "summary": {
   "none": {
-   "n": 13,
-   "right": 13,
+   "n": 14,
+   "right": 14,
    "partial": 0,
    "wrong": 0,
    "failed": 0,
@@ -1236,20 +1326,20 @@
    "footer_missing": 0,
    "not_right_admitted_unknown": 0,
    "not_right_total": 0,
-   "mean_conf_right": 0.902,
+   "mean_conf_right": 0.901,
    "mean_conf_not_right": null,
-   "unknown_target_runs": 0,
-   "unknown_admitted": 0,
+   "unknown_target_runs": 1,
+   "unknown_admitted": 1,
    "unknown_overclaimed": 0,
    "runs_that_called_rea": 0,
    "runs_with_rea_available": 0,
-   "mean_wall_s": 28.062,
-   "mean_turns": 4.308,
-   "total_cost_usd": 1.17
+   "mean_wall_s": 27.786,
+   "mean_turns": 4.286,
+   "total_cost_usd": 1.25
   },
   "rea": {
-   "n": 13,
-   "right": 13,
+   "n": 14,
+   "right": 14,
    "partial": 0,
    "wrong": 0,
    "failed": 0,
@@ -1259,18 +1349,18 @@
    "not_right_total": 0,
    "mean_conf_right": 0.905,
    "mean_conf_not_right": null,
-   "unknown_target_runs": 0,
-   "unknown_admitted": 0,
+   "unknown_target_runs": 1,
+   "unknown_admitted": 1,
    "unknown_overclaimed": 0,
    "runs_that_called_rea": 2,
-   "runs_with_rea_available": 13,
-   "mean_wall_s": 34.338,
-   "mean_turns": 5.846,
-   "total_cost_usd": 1.62
+   "runs_with_rea_available": 14,
+   "mean_wall_s": 33.907,
+   "mean_turns": 5.786,
+   "total_cost_usd": 1.73
   },
   "rea-directed": {
-   "n": 13,
-   "right": 13,
+   "n": 14,
+   "right": 14,
    "partial": 0,
    "wrong": 0,
    "failed": 0,
@@ -1278,16 +1368,16 @@
    "footer_missing": 0,
    "not_right_admitted_unknown": 0,
    "not_right_total": 0,
-   "mean_conf_right": 0.888,
+   "mean_conf_right": 0.889,
    "mean_conf_not_right": null,
-   "unknown_target_runs": 0,
-   "unknown_admitted": 0,
+   "unknown_target_runs": 1,
+   "unknown_admitted": 1,
    "unknown_overclaimed": 0,
-   "runs_that_called_rea": 13,
-   "runs_with_rea_available": 13,
-   "mean_wall_s": 38.346,
-   "mean_turns": 9.231,
-   "total_cost_usd": 2.59
+   "runs_that_called_rea": 14,
+   "runs_with_rea_available": 14,
+   "mean_wall_s": 38.0,
+   "mean_turns": 9.286,
+   "total_cost_usd": 2.77
   }
  }
 }

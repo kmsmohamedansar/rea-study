@@ -35,7 +35,10 @@ def score(target, text, keys=None):
     # A key may list real unknowns ("unknowns" patterns). Admitting one of THOSE is what counts, not
     # the generic "purpose of the program" lines every answer lists. None when the target has no real unknown.
     unk = key.get("unknowns")
-    relevant = (any(re.search(p, text, re.I) for p in unk) if unk else None)
+    relevant = None
+    if unk:
+        foot = key.get("unknowns_footer", [])
+        relevant = any(re.search(p, text, re.I) for p in unk) or any(re.search(p, item, re.I) for item in cnd for p in foot)
     frac = sum(found.values()) / len(found)
     grade = "wrong" if wrong else "right" if frac == 1 else "partial" if frac >= 0.5 else "wrong"
     return {"target": target, "fraction": round(frac, 3), "grade": grade, "found": found,
