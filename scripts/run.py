@@ -72,13 +72,15 @@ def prepare_workdir(work, arm, binary):
 def split_of(target, keys):
     return "heldout" if target in keys["split"]["heldout"] else "dev"
 
-def check_allowed(target, arm, heldout_flag, keys, raw_dir):
+def check_allowed(target, arm, heldout_flag, keys, raw_dir, repeat=1):
     split = split_of(target, keys)
     if split == "heldout" and not heldout_flag:
         sys.exit(f"{target} is held out: pass --heldout, once the rules and prompt are frozen")
     if split == "dev" and heldout_flag:
         sys.exit(f"{target} is a dev target, drop --heldout")
-    out = raw_dir / split / arm / f"{target}.json"
+    if split == "heldout" and repeat != 1:
+        sys.exit("held-out is scored once: no repeats")
+    out = raw_dir / split / arm / (f"{target}.json" if repeat == 1 else f"{target}.r{repeat}.json")
     if split == "heldout" and out.exists():
         sys.exit(f"{out} exists: held-out is scored once")
     return split, out
@@ -90,11 +92,12 @@ def main(argv=None, claude="claude"):
     ap.add_argument("--claude-cmd", default=claude)
     ap.add_argument("--raw-dir", default=str(ROOT / "results" / "raw"))
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--repeat", type=int, default=1, help="1 = the first run; 2, 3... are repeats of the same cell")
     a = ap.parse_args(argv)
     keys = {"split": json.loads((ROOT / "targets" / "split.json").read_text())}
     if a.target not in keys["split"]["dev"] + keys["split"]["heldout"]:
         sys.exit(f"unknown target {a.target}")
-    split, out = check_allowed(a.target, a.arm, a.heldout, keys, pathlib.Path(a.raw_dir))
+    split, out = check_allowed(a.target, a.arm, a.heldout, keys, pathlib.Path(a.raw_dir), a.repeat)
     binary = next(iter((ROOT / "targets" / "bin").glob(f"{SAME_BINARY.get(a.target, a.target)}_*")), None)
     if binary is None:
         sys.exit("binary missing: run scripts/build_targets.sh on this machine first")
@@ -112,7 +115,7 @@ def main(argv=None, claude="claude"):
     if result is None:
         result = {"result": "", "parse_error": p.stdout[-500:]}
     version = subprocess.run([a.claude_cmd, "--version"], capture_output=True, text=True).stdout.strip()
-    record = {"target": a.target, "arm": a.arm, "split": split, "model": MODEL, "effort": "default",
+    record = {"target": a.target, "arm": a.arm, "split": split, "repeat": a.repeat, "model": MODEL, "effort": "default",
               "rea_version": REA_VERSION if a.arm in REA_ARMS else None, "claude_version": version,
               "machine": f"{platform.system()} {platform.release()} {platform.machine()}",
               "date": time.strftime("%Y-%m-%d %H:%M"), "wall_s": wall, "exit": p.returncode,

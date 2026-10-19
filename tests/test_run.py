@@ -93,9 +93,9 @@ class Sweep(unittest.TestCase):
         dev = json.loads((ROOT / "targets" / "split.json").read_text())["dev"]
         self.assertEqual(len(full), len(dev) * 3)
         held = set(json.loads((ROOT / "targets" / "split.json").read_text())["heldout"])
-        self.assertFalse({t for t, _ in full} & held)
+        self.assertFalse({t for t, _, _ in full} & held)
         (raw / "dev" / "rea").mkdir(parents=True); (raw / "dev" / "rea" / "t01.json").write_text("{}")
-        self.assertEqual(len(sweep.plan(raw)), len(full) - 1); self.assertNotIn(("t01", "rea"), sweep.plan(raw))
+        self.assertEqual(len(sweep.plan(raw)), len(full) - 1); self.assertNotIn(("t01", "rea", 1), sweep.plan(raw))
 
 
 class Phase2b(unittest.TestCase):
@@ -124,4 +124,35 @@ class Phase2b(unittest.TestCase):
     def test_p09b_uses_p09_binary_and_is_in_dev(self):
         self.assertEqual(run.SAME_BINARY["p09b"], "p09")
         self.assertIn("p09b", json.loads((ROOT / "targets" / "split.json").read_text())["dev"])
+
+class Repeats(unittest.TestCase):
+    def setUp(self):
+        self.tmp = pathlib.Path(tempfile.mkdtemp()); self.raw = self.tmp / "raw"
+        self.fake = self.tmp / "fake-claude"; self.fake.write_text(FAKE); self.fake.chmod(0o755)
+    def go(self, *args):
+        return run.main(list(args) + ["--claude-cmd", str(self.fake), "--raw-dir", str(self.raw)])
+    def test_repeat_is_saved_under_its_own_name_and_marked(self):
+        self.assertEqual(self.go("t01", "none"), 0)
+        self.assertEqual(self.go("t01", "none", "--repeat", "2"), 0)
+        a = json.loads((self.raw / "dev" / "none" / "t01.json").read_text())
+        b = json.loads((self.raw / "dev" / "none" / "t01.r2.json").read_text())
+        self.assertEqual((a["repeat"], b["repeat"]), (1, 2))
+    def test_held_out_refuses_repeats(self):
+        with self.assertRaises(SystemExit): self.go("t04", "none", "--heldout", "--repeat", "2")
+    def test_sweep_plans_the_repeats_and_skips_done(self):
+        import sweep
+        dev = json.loads((ROOT / "targets" / "split.json").read_text())["dev"]
+        self.assertEqual(len(sweep.plan(self.raw, 3)), len(dev) * 3 * 3)
+        (self.raw / "dev" / "rea").mkdir(parents=True); (self.raw / "dev" / "rea" / "t01.r2.json").write_text("{}")
+        self.assertEqual(len(sweep.plan(self.raw, 3)), len(dev) * 3 * 3 - 1)
+        self.assertNotIn(("t01", "rea", 2), sweep.plan(self.raw, 3))
+    @NEEDS_KEY
+    def test_main_tables_use_first_runs_and_repeats_get_their_own_section(self):
+        for rep in ("1", "2", "3"): self.go("t01", "rea", "--repeat", rep)
+        out = self.tmp / "out"; results.main(["--raw-dir", str(self.raw), "--out-dir", str(out)])
+        s = json.loads((out / "dev.json").read_text())["summary"]["rea"]
+        self.assertEqual(s["n"], 1)
+        md = (out / "summary.md").read_text()
+        self.assertIn("## repeats", md); self.assertIn("| rea | 1 | 3 | 3 |", md)
+
 unittest.main() if __name__ == "__main__" else None
