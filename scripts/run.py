@@ -16,17 +16,24 @@ REA_VERSION = "6.7.0"
 TOOLS = ["Bash", "Read", "Glob", "Grep"]
 REA_MCP = {"mcpServers": {"rea": {"command": "npx", "args": ["-y", f"rea-agents@{REA_VERSION}", "mcp"]}}}
 
-def load_prompt(path):
+DIRECTED = "Use the REA tools (the `rea` MCP server) to inspect the program."
+REA_ARMS = ("rea", "rea-directed")
+
+def load_prompt(path, arm="none"):
     text = (ROOT / "docs" / "prompt.md").read_text()
     quoted = [l[2:] for l in text.splitlines() if l.startswith("> ")]
-    return "\n".join(quoted).replace("{PATH}", path)
+    prompt = "\n".join(quoted).replace("{PATH}", path)
+    if arm == "rea-directed":
+        head, sep, tail = prompt.partition("End your answer with")
+        prompt = f"{head}{DIRECTED} {sep}{tail}"
+    return prompt
 
 def build_cmd(arm, prompt, mcp_file, claude="claude"):
-    tools = TOOLS + (["mcp__rea"] if arm == "rea" else [])
+    tools = TOOLS + (["mcp__rea"] if arm in REA_ARMS else [])
     cmd = [claude, "-p", prompt, "--model", MODEL, "--output-format", "stream-json", "--verbose",
            "--no-session-persistence", "--permission-mode", "acceptEdits",
            "--allowedTools", *tools, "--strict-mcp-config"]
-    if arm == "rea":
+    if arm in REA_ARMS:
         cmd += ["--mcp-config", str(mcp_file)]
     return cmd
 
@@ -53,7 +60,7 @@ SKILL_SRC = ROOT / "vendor" / "rea-skill" / "reverse-engineer-anything"
 def prepare_workdir(work, arm, binary):
     """Empty throwaway folder holding the binary. The REA arm also gets REA's own skill, here only."""
     shutil.copy(binary, work / "target")
-    if arm == "rea":
+    if arm in REA_ARMS:
         shutil.copytree(SKILL_SRC, work / ".claude" / "skills" / "reverse-engineer-anything")
 
 def split_of(target, keys):
@@ -72,7 +79,7 @@ def check_allowed(target, arm, heldout_flag, keys, raw_dir):
 
 def main(argv=None, claude="claude"):
     ap = argparse.ArgumentParser()
-    ap.add_argument("target"); ap.add_argument("arm", choices=["none", "rea"])
+    ap.add_argument("target"); ap.add_argument("arm", choices=["none", "rea", "rea-directed"])
     ap.add_argument("--heldout", action="store_true")
     ap.add_argument("--claude-cmd", default=claude)
     ap.add_argument("--raw-dir", default=str(ROOT / "results" / "raw"))
@@ -89,7 +96,7 @@ def main(argv=None, claude="claude"):
     prepare_workdir(work, a.arm, binary)
     mcp_file = work / ".mcp-rea.json"
     mcp_file.write_text(json.dumps(REA_MCP))
-    cmd = build_cmd(a.arm, load_prompt(str(work / "target")), mcp_file, a.claude_cmd)
+    cmd = build_cmd(a.arm, load_prompt(str(work / "target"), a.arm), mcp_file, a.claude_cmd)
     if a.dry_run:
         print(" ".join(map(str, cmd))); return 0
     t0 = time.time()
@@ -100,7 +107,7 @@ def main(argv=None, claude="claude"):
         result = {"result": "", "parse_error": p.stdout[-500:]}
     version = subprocess.run([a.claude_cmd, "--version"], capture_output=True, text=True).stdout.strip()
     record = {"target": a.target, "arm": a.arm, "split": split, "model": MODEL, "effort": "default",
-              "rea_version": REA_VERSION if a.arm == "rea" else None, "claude_version": version,
+              "rea_version": REA_VERSION if a.arm in REA_ARMS else None, "claude_version": version,
               "machine": f"{platform.system()} {platform.release()} {platform.machine()}",
               "date": time.strftime("%Y-%m-%d %H:%M"), "wall_s": wall, "exit": p.returncode,
               "stderr_tail": p.stderr[-500:], "tools_used": tools,

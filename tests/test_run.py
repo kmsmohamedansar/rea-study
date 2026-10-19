@@ -32,9 +32,18 @@ class T(unittest.TestCase):
         self.assertEqual([x for x in r if x not in n], ["mcp__rea", "--mcp-config", "m.json"])
         self.assertIn("claude-sonnet-5-5", n); self.assertIn("--strict-mcp-config", n)
 
+    def test_directed_arm_adds_one_sentence_and_nothing_else(self):
+        base = run.load_prompt("/x/target", "rea")
+        d = run.load_prompt("/x/target", "rea-directed")
+        self.assertEqual(run.load_prompt("/x/target", "none"), base)
+        self.assertIn(run.DIRECTED, d); self.assertNotIn(run.DIRECTED, base)
+        self.assertEqual(d.replace(run.DIRECTED + " ", ""), base)
+        a, b = run.build_cmd("rea", "P", "m.json"), run.build_cmd("rea-directed", "P", "m.json")
+        self.assertEqual(a, b)
+
     def test_skill_goes_to_rea_arm_only(self):
         binary = next((ROOT / "targets" / "bin").glob("t01_*"))
-        for arm, expect in (("none", False), ("rea", True)):
+        for arm, expect in (("none", False), ("rea", True), ("rea-directed", True)):
             w = pathlib.Path(tempfile.mkdtemp()); run.prepare_workdir(w, arm, binary)
             self.assertTrue((w / "target").exists())
             self.assertEqual((w / ".claude" / "skills" / "reverse-engineer-anything" / "SKILL.md").exists(), expect)
