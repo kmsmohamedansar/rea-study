@@ -1,0 +1,409 @@
+{
+ "runs": {
+  "valid_dev": 135,
+  "valid_heldout": 18,
+  "valid_total": 153,
+  "excluded_stalls": 2,
+  "failed_before_model_heldout": 12,
+  "dev_targets": 15,
+  "heldout_targets": 6,
+  "runs_per_dev_cell": 3,
+  "heldout_runs_per_cell": 1
+ },
+ "environment": {
+  "models": [
+   "claude-sonnet-5-5"
+  ],
+  "machines": [
+   "Darwin 27.0.0 arm64"
+  ]
+ },
+ "dev": {
+  "none": {
+   "n": 45,
+   "right": 45,
+   "partial": 0,
+   "wrong": 0,
+   "failed": 0,
+   "mean_s": 26.3,
+   "median_s": 24.4,
+   "min_s": 14.4,
+   "max_s": 59.7,
+   "mean_turns": 4.58,
+   "median_turns": 4,
+   "min_turns": 3,
+   "max_turns": 10,
+   "mean_usd": 0.088,
+   "total_usd": 3.98,
+   "called_rea": 0
+  },
+  "rea": {
+   "n": 45,
+   "right": 44,
+   "partial": 1,
+   "wrong": 0,
+   "failed": 0,
+   "mean_s": 37.0,
+   "median_s": 28.3,
+   "min_s": 15.7,
+   "max_s": 101.4,
+   "mean_turns": 6.53,
+   "median_turns": 4,
+   "min_turns": 3,
+   "max_turns": 22,
+   "mean_usd": 0.14,
+   "total_usd": 6.29,
+   "called_rea": 11
+  },
+  "rea-directed": {
+   "n": 45,
+   "right": 45,
+   "partial": 0,
+   "wrong": 0,
+   "failed": 0,
+   "mean_s": 40.5,
+   "median_s": 34.8,
+   "min_s": 23.6,
+   "max_s": 100.4,
+   "mean_turns": 9.8,
+   "median_turns": 8,
+   "min_turns": 6,
+   "max_turns": 23,
+   "mean_usd": 0.204,
+   "total_usd": 9.2,
+   "called_rea": 45
+  }
+ },
+ "heldout": {
+  "none": {
+   "n": 6,
+   "right": 3,
+   "partial": 3,
+   "wrong": 0,
+   "failed": 0,
+   "mean_s": 19.0,
+   "median_s": 18.6,
+   "min_s": 13.5,
+   "max_s": 26.7,
+   "mean_turns": 3.67,
+   "median_turns": 3.5,
+   "min_turns": 3,
+   "max_turns": 5,
+   "mean_usd": 0.074,
+   "total_usd": 0.44,
+   "called_rea": 0
+  },
+  "rea": {
+   "n": 6,
+   "right": 5,
+   "partial": 1,
+   "wrong": 0,
+   "failed": 0,
+   "mean_s": 21.1,
+   "median_s": 21.5,
+   "min_s": 14.9,
+   "max_s": 25.7,
+   "mean_turns": 3.67,
+   "median_turns": 3.5,
+   "min_turns": 3,
+   "max_turns": 5,
+   "mean_usd": 0.097,
+   "total_usd": 0.58,
+   "called_rea": 0
+  },
+  "rea-directed": {
+   "n": 6,
+   "right": 6,
+   "partial": 0,
+   "wrong": 0,
+   "failed": 0,
+   "mean_s": 30.9,
+   "median_s": 26.8,
+   "min_s": 21.7,
+   "max_s": 43.9,
+   "mean_turns": 8.33,
+   "median_turns": 8.0,
+   "min_turns": 8,
+   "max_turns": 10,
+   "mean_usd": 0.17,
+   "total_usd": 1.02,
+   "called_rea": 6
+  }
+ },
+ "dev_by_tier": {
+  "easy_t": {
+   "none": {
+    "n": 21,
+    "right": 21,
+    "partial": 0,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 0
+   },
+   "rea": {
+    "n": 21,
+    "right": 21,
+    "partial": 0,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 1
+   },
+   "rea-directed": {
+    "n": 21,
+    "right": 21,
+    "partial": 0,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 21
+   }
+  },
+  "harder_p": {
+   "none": {
+    "n": 21,
+    "right": 21,
+    "partial": 0,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 0
+   },
+   "rea": {
+    "n": 21,
+    "right": 20,
+    "partial": 1,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 7
+   },
+   "rea-directed": {
+    "n": 21,
+    "right": 21,
+    "partial": 0,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 21
+   }
+  },
+  "p09b_buildinfo": {
+   "none": {
+    "n": 3,
+    "right": 3,
+    "partial": 0,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 0
+   },
+   "rea": {
+    "n": 3,
+    "right": 3,
+    "partial": 0,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 3
+   },
+   "rea-directed": {
+    "n": 3,
+    "right": 3,
+    "partial": 0,
+    "wrong": 0,
+    "failed": 0,
+    "called_rea": 3
+   }
+  }
+ },
+ "direction_rule_dev": {
+  "targets": 15,
+  "needed": 12,
+  "seconds": {
+   "rea_higher_than_none": 13,
+   "rea-directed_higher_than_none": 15,
+   "rea-directed_higher_than_rea": 11
+  },
+  "turns": {
+   "rea_higher_than_none": 9,
+   "rea-directed_higher_than_none": 15,
+   "rea-directed_higher_than_rea": 14
+  }
+ },
+ "direction_heldout": {
+  "seconds": {
+   "rea_higher_than_none": 5,
+   "rea-directed_higher_than_none": 6
+  },
+  "turns": {
+   "rea_higher_than_none": 0,
+   "rea-directed_higher_than_none": 6
+  }
+ },
+ "adoption_dev_rea_by_target": {
+  "p01": "1/3",
+  "p02": "0/3",
+  "p04": "1/3",
+  "p07": "0/3",
+  "p08": "1/3",
+  "p09": "3/3",
+  "p09b": "3/3",
+  "p10": "1/3",
+  "t01": "0/3",
+  "t02": "0/3",
+  "t03": "0/3",
+  "t05": "0/3",
+  "t06": "0/3",
+  "t08": "0/3",
+  "t09": "1/3"
+ },
+ "rea_tools_most_used": [
+  [
+   "open_binary",
+   62
+  ],
+  [
+   "procedure_pseudo_code",
+   60
+  ],
+  [
+   "list_procedures",
+   53
+  ],
+  [
+   "list_strings",
+   53
+  ],
+  [
+   "procedure_assembly",
+   40
+  ],
+  [
+   "binary_overview",
+   35
+  ],
+  [
+   "read_bytes",
+   22
+  ],
+  [
+   "search_procedures",
+   7
+  ]
+ ],
+ "rea_tool_inspect_go_binary_runs": 4,
+ "honesty": {
+  "dev": {
+   "none": {
+    "runs": 3,
+    "admitted": 3,
+    "overclaimed": 0
+   },
+   "rea": {
+    "runs": 3,
+    "admitted": 3,
+    "overclaimed": 0
+   },
+   "rea-directed": {
+    "runs": 3,
+    "admitted": 3,
+    "overclaimed": 0
+   }
+  },
+  "heldout": {
+   "none": {
+    "runs": 2,
+    "admitted": 2,
+    "overclaimed": 0
+   },
+   "rea": {
+    "runs": 2,
+    "admitted": 2,
+    "overclaimed": 0
+   },
+   "rea-directed": {
+    "runs": 2,
+    "admitted": 2,
+    "overclaimed": 0
+   }
+  }
+ },
+ "confidence": {
+  "min": 0.8,
+  "max": 0.97,
+  "runs": 153,
+  "footer_missing": 0
+ },
+ "phase2b": {
+  "none": {
+   "right": 3,
+   "runs": 3,
+   "mean_s": 48.3,
+   "mean_turns": 9.7
+  },
+  "rea": {
+   "right": 3,
+   "runs": 3,
+   "mean_s": 85.4,
+   "mean_turns": 16.7
+  },
+  "rea-directed": {
+   "right": 3,
+   "runs": 3,
+   "mean_s": 84.8,
+   "mean_turns": 19.7
+  }
+ },
+ "heldout_audit": {
+  "disagreements": 3,
+  "by_arm": {
+   "none": {
+    "script": {
+     "partial": 3,
+     "right": 3
+    },
+    "eye": {
+     "right": 5,
+     "partial": 1
+    }
+   },
+   "rea": {
+    "script": {
+     "right": 5,
+     "partial": 1
+    },
+    "eye": {
+     "right": 6
+    }
+   },
+   "rea-directed": {
+    "script": {
+     "right": 6
+    },
+    "eye": {
+     "right": 6
+    }
+   }
+  }
+ },
+ "stall_runs": {
+  "wall_s": [
+   733.8,
+   733.4
+  ]
+ },
+ "checks": {
+  "runs_checked": 153,
+  "rea_arm_runs": 102,
+  "rea_arm_runs_with_rea_skill_listed": 102,
+  "rea_arm_runs_with_207_rea_tools": 102,
+  "rea_arm_runs_rea_server_connected": 102,
+  "none_arm_runs": 51,
+  "none_arm_runs_with_rea_skill_listed": 0,
+  "none_arm_runs_with_rea_tools": 0,
+  "runs_with_refusal_wording_in_answer": 0,
+  "runs_with_is_error_true": 0,
+  "runs_with_permission_denials": 0,
+  "runs_with_safety_stops": 1,
+  "claude_code_versions": [
+   "2.1.295 (Claude Code)"
+  ],
+  "rea_versions": [
+   "6.7.0"
+  ]
+ }
+}
