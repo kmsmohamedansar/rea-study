@@ -1,0 +1,132 @@
+{
+ "_note": "Eye audit of all 18 held-out answers, made after scoring with the frozen key (fingerprint 87e45ab215451e68). No pattern was edited. Where script and eye differ both are reported.",
+ "disagreements": 3,
+ "runs": [
+  {
+   "target": "p03",
+   "arm": "none",
+   "script": "partial",
+   "eye": "right",
+   "note": "The answer states '4 after an unknown command, with error printed first' under an Exit codes heading; the word 'exit' is on the previous line so the pattern missed it. Script too strict."
+  },
+  {
+   "target": "p03",
+   "arm": "rea",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "p03",
+   "arm": "rea-directed",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "p05",
+   "arm": "none",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "p05",
+   "arm": "rea",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "p05",
+   "arm": "rea-directed",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "p06",
+   "arm": "none",
+   "script": "partial",
+   "eye": "partial",
+   "note": "Says the binary 'contains what look like the SHA-256 round constants' but names neither the constants nor the 64 rounds. A real miss; script and eye agree."
+  },
+  {
+   "target": "p06",
+   "arm": "rea",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "p06",
+   "arm": "rea-directed",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "t04",
+   "arm": "none",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "t04",
+   "arm": "rea",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "t04",
+   "arm": "rea-directed",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "t07",
+   "arm": "none",
+   "script": "partial",
+   "eye": "right",
+   "note": "States the real password is not recoverable: only a 32-bit hash is stored and many strings collide with it. The pattern knew 'collision' but not 'collide'. Script too strict."
+  },
+  {
+   "target": "t07",
+   "arm": "rea",
+   "script": "partial",
+   "eye": "right",
+   "note": "States many different strings pass the 32-bit check and that no matching string was searched for. Same wording gap. Script too strict."
+  },
+  {
+   "target": "t07",
+   "arm": "rea-directed",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "t10",
+   "arm": "none",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "t10",
+   "arm": "rea",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  },
+  {
+   "target": "t10",
+   "arm": "rea-directed",
+   "script": "right",
+   "eye": "right",
+   "note": ""
+  }
+ ]
+}

@@ -189,6 +189,15 @@ class HeldOutRunner(unittest.TestCase):
         held = set(json.loads((ROOT / "targets" / "split.json").read_text())["heldout"])
         self.assertFalse({t for t, _, _ in sweep.plan(pathlib.Path(tempfile.mkdtemp()), 3)} & held)
 
+class HeldOutAudit(unittest.TestCase):
+    def test_audit_file_covers_exactly_the_eighteen_held_out_cells(self):
+        a = json.loads((ROOT / "results" / "heldout-eye-audit.json").read_text())
+        held = json.loads((ROOT / "targets" / "split.json").read_text())["heldout"]
+        cells = {(r["target"], r["arm"]) for r in a["runs"]}
+        self.assertEqual(cells, {(t, arm) for t in held for arm in ("none", "rea", "rea-directed")})
+        self.assertEqual(a["disagreements"], sum(r["script"] != r["eye"] for r in a["runs"]))
+        self.assertTrue(all(r["note"] for r in a["runs"] if r["script"] != r["eye"]))
+
 class Exclusions(unittest.TestCase):
     @NEEDS_KEY
     def test_excluded_run_is_left_out_of_the_tables_but_listed(self):
