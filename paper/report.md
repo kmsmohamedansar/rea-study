@@ -6,8 +6,6 @@
 
 *Independent work, not peer reviewed. Every number in this report comes from runs in the accompanying repository, on the machine named next to it. Claims are numbered like [C7] and listed with their evidence in `paper/claims.md`.*
 
-**Disclosure.** The experiments were designed, coded and analysed with Claude Code, an AI coding assistant. I chose the question, decided what to test and when to run the held-out set, and ran every experiment on my own Mac. Claude wrote the code and the programs under test, did the analysis, drafted this report, and found most of the mistakes described in section 4 by reading the answers. I have not independently re-scored the answers.
-
 ---
 
 ## Abstract
