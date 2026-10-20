@@ -71,6 +71,13 @@ def prepare_workdir(work, arm, binary):
     if arm in REA_ARMS:
         shutil.copytree(SKILL_SRC, work / ".claude" / "skills" / "reverse-engineer-anything")
 
+LIMIT_EXIT = 75     # run.py exits with this when the usage limit stopped the run before the model was called
+
+def is_usage_limit(result):
+    """The Claude plan's usage limit: an error result with no API time and the limit text. Not an agent outcome."""
+    text = (result.get("result") or "").lower()
+    return bool(result.get("is_error")) and "hit your" in text and "limit" in text and not result.get("duration_api_ms")
+
 def split_of(target, keys):
     return "heldout" if target in keys["split"]["heldout"] else "dev"
 
@@ -114,6 +121,11 @@ def main(argv=None, claude="claude"):
     p = subprocess.run(cmd, cwd=work, capture_output=True, text=True, stdin=subprocess.DEVNULL)
     wall = round(time.time() - t0, 1)
     result, tools, init, texts = parse_stream(p.stdout)
+    if result is not None and is_usage_limit(result):
+        # Not a result: the model was never called. Save nothing so the cell stays free, and tell the caller to stop.
+        print(f"{a.target} {a.arm}: usage limit reached ({result.get('result', '').strip()}). Nothing saved. Try again after the reset.")
+        shutil.rmtree(work, ignore_errors=True)
+        return LIMIT_EXIT
     if result is None:
         result = {"result": "", "parse_error": p.stdout[-500:]}
     version = subprocess.run([a.claude_cmd, "--version"], capture_output=True, text=True).stdout.strip()

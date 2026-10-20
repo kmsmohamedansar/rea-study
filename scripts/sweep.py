@@ -29,7 +29,11 @@ def main(argv=None):
     for i, (t, arm, rep) in enumerate(todo, 1):
         print(f"[{i}/{len(todo)}] {t} {arm}" + (f" (repeat {rep})" if rep > 1 else ""), flush=True)
         cmd = [sys.executable, str(ROOT / "scripts" / "run.py"), t, arm, "--raw-dir", a.raw_dir, "--repeat", str(rep)]
-        if subprocess.run(cmd).returncode != 0:
+        rc = subprocess.run(cmd).returncode
+        if rc == 75:
+            print("Usage limit reached. Stopped. Nothing was saved for this run. Run the same command again after the reset; it continues where it stopped.")
+            return 0
+        if rc != 0:
             failed.append((t, arm, rep))
     print(f"done. failed runs: {failed or 'none'}")
     return 0

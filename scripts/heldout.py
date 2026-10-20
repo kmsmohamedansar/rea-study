@@ -30,7 +30,11 @@ def main(argv=None):
     for i, (t, arm) in enumerate(todo, 1):
         print(f"[{i}/{len(todo)}] {t} {arm}", flush=True)
         cmd = [sys.executable, str(ROOT / "scripts" / "run.py"), t, arm, "--heldout", "--raw-dir", a.raw_dir]
-        if subprocess.run(cmd).returncode != 0:
+        rc = subprocess.run(cmd).returncode
+        if rc == 75:
+            print("Usage limit reached. Stopped. Nothing was saved for this run. Run the same command again after the reset; it continues where it stopped.")
+            return 0
+        if rc != 0:
             failed.append((t, arm))
     print(f"done. runs that did not exit 0: {failed or 'none'}")
     return 0

@@ -232,4 +232,38 @@ class Repeats(unittest.TestCase):
         md = (out / "summary.md").read_text()
         self.assertIn("## repeats", md); self.assertIn("| rea | 1 | 3 | 3 |", md)
 
+
+class UsageLimit(unittest.TestCase):
+    LIMIT = """#!/bin/sh
+case "$1" in --version) echo v; exit 0;; esac
+cat <<'JSON'
+{"type": "result", "subtype": "success", "is_error": true, "duration_api_ms": 0, "result": "You've hit your session limit \\u00b7 resets 10:20pm (America/Toronto)"}
+JSON
+exit 1
+"""
+    def setUp(self):
+        self.tmp = pathlib.Path(tempfile.mkdtemp()); self.raw = self.tmp / "raw"
+        self.fake = self.tmp / "limit-claude"; self.fake.write_text(self.LIMIT); self.fake.chmod(0o755)
+    def test_limit_saves_nothing_and_returns_the_stop_code(self):
+        code = run.main(["t04", "none", "--heldout", "--claude-cmd", str(self.fake), "--raw-dir", str(self.raw)])
+        self.assertEqual(code, run.LIMIT_EXIT)
+        self.assertFalse((self.raw / "heldout" / "none" / "t04.json").exists())
+    def test_the_cell_is_still_free_afterwards(self):
+        run.main(["t04", "none", "--heldout", "--claude-cmd", str(self.fake), "--raw-dir", str(self.raw)])
+        good = self.tmp / "good"; good.write_text(FAKE); good.chmod(0o755)
+        self.assertEqual(run.main(["t04", "none", "--heldout", "--claude-cmd", str(good), "--raw-dir", str(self.raw)]), 0)
+    def test_a_real_error_answer_is_not_mistaken_for_the_limit(self):
+        self.assertFalse(run.is_usage_limit({"is_error": True, "duration_api_ms": 900, "result": "hit your head, limit of the table"}))
+        self.assertFalse(run.is_usage_limit({"is_error": False, "duration_api_ms": 0, "result": "You've hit your session limit"}))
+        self.assertTrue(run.is_usage_limit({"is_error": True, "duration_api_ms": 0, "result": "You've hit your session limit"}))
+    def test_runners_stop_at_the_limit(self):
+        import heldout, io, contextlib
+        from unittest import mock
+        class P: returncode = 75
+        with mock.patch.object(heldout.subprocess, "run", return_value=P()) as m, contextlib.redirect_stdout(io.StringIO()) as out:
+            heldout.main(["--run-held-out-once", "--raw-dir", str(self.raw)])
+        self.assertEqual(m.call_count, 1); self.assertIn("Usage limit reached", out.getvalue())
+
+unittest.main() if __name__ == "__main__" else None
+
 unittest.main() if __name__ == "__main__" else None
