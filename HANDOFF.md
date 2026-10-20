@@ -1,7 +1,8 @@
-# Handoff: start here in a fresh session
+# Historical pre-study handoff
 
-Draft plan, 2026-10-19. Nothing built or measured yet. Owner approves before any
-step runs.
+**Archived plan (2026-10-19).** The study closed on 2026-10-20. The status and approval steps below describe the plan before any experiments; they are not current instructions. For the completed study, start with `README.md`, `CASE_STUDY.md` and `paper/report.md`.
+
+Original plan, 2026-10-19. Nothing built or measured yet. Owner approval was required before any step ran.
 
 ## The question
 

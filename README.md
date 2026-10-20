@@ -9,7 +9,7 @@ An independent test of [REA](https://github.com/morluto/rea) ("Reverse Engineer 
 
 ## What was found, in one paragraph
 
-On 20 small and medium programs where the right answers were known, an agent with ordinary Mac tools matched an agent with REA on accuracy (development 45, 44 and 45 of 45; held-out 5, 6 and 6 of 6 after the answers were read). Left alone, the agent rarely chose REA. Told to use it, it took longer and more steps for the same answers. Every set-up said it could not recover a hidden key. See `CASE_STUDY.md` for the short version and `paper/report.md` for the full report.
+On these small and medium programs, the study did not detect an accuracy benefit from REA (development 45, 44 and 45 of 45; held-out 5, 6 and 6 of 6 after the answers were read). Those near-ceiling scores do not establish equal accuracy on other programs. Left alone, the agent rarely chose REA. Told to use it, it took longer and more steps. When the prompt asked what could not be determined, every set-up said it could not recover a hidden secret; the study did not test whether agents would volunteer that uncertainty unprompted. See `CASE_STUDY.md` for the short version and `paper/report.md` for the full report.
 
 ## Read this first
 
@@ -17,6 +17,7 @@ On 20 small and medium programs where the right answers were known, an agent wit
 |---|---|
 | `CASE_STUDY.md` | Two-chapter short version with the claims ledger |
 | `paper/report.md` | The full report (draft) |
+| `HANDOFF.md` | Historical pre-study plan; its status and approval steps are no longer current |
 | `paper/claims.md` | Every claim, the number behind it, where it comes from, how it was checked |
 | `docs/analysis-plan.md` | What would be reported and what could be claimed, written before the repeats and the held-out run |
 | `NOTES.md` | Dated log of every decision, mistake and repair |

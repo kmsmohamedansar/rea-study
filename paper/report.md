@@ -14,11 +14,11 @@
 
 REA ("Reverse Engineer Anything") is a free tool that lets an AI agent inspect programs it has no source code for. The only published benchmark of it that I could find was run by the author of a competing tool. I tested it independently on 21 questions about 20 programs I wrote or took from open-source code, so that I knew every right answer. Each question was put to the same agent (Claude Sonnet 5.5) in three set-ups: ordinary Mac tools only, ordinary tools plus REA and REA's own instructions, and the same with a sentence telling the agent to use REA. That made 153 scored runs [C1].
 
-On accuracy there was no difference. In development the three set-ups got 45, 44 and 45 of 45 right [C6]. On a held-out set scored once, a script gave 3, 5 and 6 of 6, but reading the answers showed three of the script's misses were its own errors, and the corrected counts were 5, 6 and 6 [C7]. By the rule I wrote before the run, that is no difference [C8].
+I did not detect an accuracy benefit from REA on these programs. In development the three set-ups got 45, 44 and 45 of 45 right [C6]. On a held-out set scored once, a script gave 3, 5 and 6 of 6, but reading the answers showed three of the script's misses were its own errors, and the corrected counts were 5, 6 and 6 [C7]. The largest gap was below the threshold I wrote before the run [C8]. Scores this close to the ceiling cannot establish that the set-ups are equally accurate on harder programs.
 
 Left alone, the agent rarely chose REA: in 11 of 45 development runs and 0 of 6 held-out runs, mostly on the harder programs [C10, C11]. Told to use it, it did every time, and took longer and more steps for the same answers. On development the natural REA set-up cost about 1.6 times as much per run as ordinary tools, and the directed one about 2.3 times [C13 to C16]. Asked directly for a Go program's compiler and library versions, which REA advertises it can read, all three set-ups got all four facts right, and the REA set-ups took about 1.8 times as long [C18, C19].
 
-On the questions with a real unknown, such as a decryption key that is not in the program, every set-up said it could not recover the hidden text, in all 15 runs, and none stated it [C21].
+On the questions with a real unknown, such as a decryption key that is not in the program, every set-up said it could not recover the hidden text, in all 15 runs, and none stated it [C21]. The prompt explicitly asked what could not be determined, so this measures responses to that request, not whether the agents would volunteer uncertainty on their own.
 
 The most useful findings were about measuring. My answer key and marking script were wrong in every scoring round, in both directions, and I only found out by reading the answers [C23, C24]. A harness fault, a usage limit and a provider message each damaged runs in ways I had not planned for [C25, C26]. This report describes them because the same mistakes would be easy to make again.
 
@@ -178,7 +178,7 @@ Easy tier: 21 of 21 right in every set-up. Harder tier: 21, 20 (+1 partial), 21.
 
 Three disagreements, all the script being too strict (section 4.1). One real miss, which the script and the reading agree on: the no-tool reply for `p06` said the program "contains what look like the SHA-256 round constants" without naming them or the 64 rounds.
 
-By the rule I set beforehand, a claim of an accuracy difference needs a gap of at least two fully right answers after the reading. The largest gap is one. **No accuracy difference was found.**
+By the rule I set beforehand, a claim of an accuracy difference needs a gap of at least two fully right answers after the reading. The largest gap is one. **No accuracy benefit from REA was detected on these programs.** This threshold is a reporting rule, not an equivalence test; with scores near the ceiling and only six held-out questions, the study cannot rule out a benefit on harder programs.
 
 ### 5.2 Does the agent choose REA?
 
@@ -231,7 +231,7 @@ Asked for the compiler and library versions, all four facts (Go 1.24.7, `google/
 
 Here the natural set-up did choose REA in all three runs [C11], and REA's own Go build-information tool was called in 4 runs overall [C20]. It gave the same answers as the ordinary tools, in about 1.8 times the time [C19]. The published benchmark reports the same pattern outside an agent: 0.56 seconds with REA against 0.06 with `go version -m` [C30, second-hand].
 
-### 5.5 Honesty about what cannot be known
+### 5.5 Acknowledging unknowns when asked
 
 Three questions had a real unknown: one development (`p10`, a decryption key derived from an environment variable that is not in the file) and two held-out (`p05`, the same idea; `t07`, a password stored only as a 32-bit hash). Five runs per set-up in total [C21]:
 
@@ -240,7 +240,7 @@ Three questions had a real unknown: one development (`p10`, a decryption key der
 | Named the unknown | 5 of 5 | 5 of 5 | 5 of 5 |
 | Stated the hidden text or password | 0 | 0 | 0 |
 
-The wording varied. One reply: "I did not recover the unmasked text." Another: "The correct `QS_KEY` value. It is not in the binary." Another: "The key is a one-way hash of that value, so the plaintext can't be derived from the binary alone." In the first `p10` runs, two of the three also tried guessing user names or constraining the key to printable text before concluding they could not choose one. None stated a message.
+The wording varied. One reply: "I did not recover the unmasked text." Another: "The correct `QS_KEY` value. It is not in the binary." Another: "The key is a one-way hash of that value, so the plaintext can't be derived from the binary alone." In the first `p10` runs, two of the three also tried guessing user names or constraining the key to printable text before concluding they could not choose one. None stated a message. Because the shared prompt explicitly asks for unknowns, this result shows how the agents answered that request. It does not show whether they would acknowledge the same limits without being asked.
 
 ### 5.6 Stated confidence
 
@@ -254,9 +254,9 @@ Second-hand, on different programs, versions and set-up, so only the direction i
 
 ## 6. What this means
 
-On small and medium programs, an agent with ordinary tools matched the agent with REA on every accuracy measure I could define, was just as willing to say what it could not know, and was faster and cheaper. Left alone, the agent mostly did not pick REA. When it did, on harder programs and on Go build information, it reached the same answers.
+On these small and medium programs, I did not detect an accuracy benefit from REA. The agent with ordinary tools also named the real unknowns when asked, and was faster and cheaper. Left alone, the agent mostly did not pick REA. When it did, on harder programs and on Go build information, it reached the same answers.
 
-That does not show REA is not useful. The programs here are small, written by one author, and answerable by reading strings and assembly. It is the kind of work an agent with a shell already does well. If REA has an edge, it should be on programs that are large, scrambled, or in formats where ordinary tools are weak, which this study did not test. The honest conclusion is narrower: **if you are asking an agent to explain a small compiled program, adding REA did not make the answer better, and cost more.**
+That does not show REA is not useful. The programs here are small, written by one author, and answerable by reading strings and assembly. It is the kind of work an agent with a shell already does well. If REA has an edge, it should be on programs that are large, scrambled, or in formats where ordinary tools are weak, which this study did not test. The honest conclusion is narrower: **in this test of small compiled programs, adding REA did not produce a detectable accuracy benefit and took more time and steps.**
 
 ---
 
@@ -265,7 +265,8 @@ That does not show REA is not useful. The programs here are small, written by on
 - **One model, one machine, one prompt.** A different model, a different Mac, or different wording could behave differently [C3]. The Mac's model, chip and memory (MacBook Air, M4, 16 GB) were reported by the author after the runs and are not recorded by the harness; only its operating system and architecture are in the run records.
 - **Small programs, one author.** Single files of tens to a few thousand lines, with answers I wrote. Nothing here says anything about large commercial software, and the programs may share my habits.
 - **Three runs per question, one in the held-out set.** The held-out set is six questions. Differences in time and steps could partly be chance; the 12-of-15 rule is a guard, not a test.
-- **The key checks only its listed facts**, and the reading of the held-out answers was done by the same person who wrote the key.
+- **The key checks only its listed facts**, and the reading of the held-out answers was done by the same person who wrote the key. One answer included a false statement the key did not catch, so the reported accuracy is accuracy against the listed facts, not a complete check of each explanation.
+- **Unknowns were prompted.** Every arm was asked to say what it could not determine. The three unknown-answer questions test compliance with that request, not spontaneous uncertainty or confidence calibration.
 - **The no-tool set-up is not "no tools".** It has the Mac's shell and anything installed on it. "No REA" is the accurate name.
 - **A decompiler I built myself.** Ghidra's official 12.1.4 download contains decompilers for Linux and Windows only, so I built the Apple silicon one from the source in the same download with changed settings (its own build file hard-codes macOS as Intel). That binary is not the one Ghidra ships; any difference in decompiler output is a limit on these results. REA's own checker accepted it.
 - **Harness changes after runs began.** Standard input was closed and all messages were kept after the stall; the runner learned to stop at a usage limit before the held-out run. They are listed in section 4.3 and in `NOTES.md`.
