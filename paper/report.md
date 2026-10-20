@@ -88,6 +88,10 @@ The key lives only in the cloud container where scoring happens, not on the mach
 
 ### 3.3 Three set-ups, one difference
 
+![Figure 1. How one run works. A program with a known answer and one fixed question go to one of three set-ups, then to an agent working in an empty folder. The run is saved as a record, then scored in the cloud against an answer key that is never on the study machine.](figures/fig1-how-a-run-works.svg)
+
+*Figure 1. How one run works. Colours are the same three set-ups in every figure: blue is ordinary tools only, orange is REA left alone, green is REA with the instruction to use it.*
+
 | Set-up | What the agent has |
 |---|---|
 | `none` | Ordinary Mac command-line tools (the shell, file reading and searching). |
@@ -128,6 +132,10 @@ Two honest notes. First, I changed my own standard once: I had first read one fa
 
 What I would do again: keep the answer key separate from the machine that runs the agents; write down the rules before the one-shot run; read the replies behind any difference that matters; and add, for each repair, a test built from the real wording that caused it. The repo has 72 tests [C32].
 
+![Figure 5. For each group and set-up, the share of answers marked right by the first marking (hollow dot) and after the answers were read and the marking repaired (filled dot). Every group moved up or stayed the same; none moved down.](figures/fig5-marking.svg)
+
+*Figure 5. The first marking against the corrected marking. Data: C23 and C27. The first-marking counts for the development groups are those written in `NOTES.md` at the time; the answer-key versions that produced them are not kept.*
+
 ### 4.2 The agent did not use REA until it was told to
 
 My first `rea` runs had REA connected, all 207 tools available and nothing denied. The agent used only ordinary shell commands. I then added REA's own instruction file to that set-up, which is how the published benchmark's REA arm works, and it still did not use REA on the easy program. That is why there are two REA set-ups: one measures whether the agent chooses the tool, the other measures what the tool adds when it is used [C10 to C12].
@@ -159,6 +167,10 @@ All numbers are from the study machine, a Mac (`Darwin 27.0.0 arm64`; *[OWNER] a
 
 Easy tier: 21 of 21 right in every set-up. Harder tier: 21, 20 (+1 partial), 21. The one partial answer is a stack-machine reply that never described the conditional-jump operation.
 
+![Figure 2. Share of answers that were fully right, in three panels: development by script, held-out by script, and held-out after a person read every answer. Development: 45, 44 and 45 of 45. Held-out by script: 3, 5 and 6 of 6. Held-out after reading: 5, 6 and 6 of 6.](figures/fig2-accuracy.svg)
+
+*Figure 2. Data: C6 and C7.*
+
 **Held-out, 6 runs per set-up, scored once** [C7, C8]:
 
 | | none | rea | rea-directed |
@@ -183,6 +195,10 @@ Natural set-up (`rea`) [C10, C11]:
 
 The harder questions where it chose REA most were the Go program (3 of 3 on both Go questions); on most others it did so once in three runs or not at all. The directed set-up called REA in 45 of 45 development runs and 6 of 6 held-out runs, as instructed.
 
+![Figure 3. How often the agent chose REA when left alone: 1 of 21 runs on the easy development questions, 7 of 21 on the harder ones, 3 of 3 on the Go build-information question, and 0 of 6 held-out.](figures/fig3-adoption.svg)
+
+*Figure 3. Data: C10 and C11.*
+
 ### 5.3 Time, steps and cost
 
 Development, per run, 45 runs per set-up [C13 to C16]:
@@ -196,6 +212,14 @@ Development, per run, 45 runs per set-up [C13 to C16]:
 By the rule I set beforehand (the same direction on at least 12 of the 15 questions), the natural REA set-up was slower than no-tool on 13 of 15 and the directed one on 15 of 15; directed against natural was 11 of 15, no clear difference. The directed set-up took more turns than no-tool on all 15 and than the natural one on 14; natural against no-tool was 9 of 15, no clear difference. The cost is what the command-line tool reports a run would cost at API prices; I pay a flat Pro fee, so it is a measure of work, not a bill.
 
 Held-out (one run per cell, so only descriptive) [C17]: mean seconds 19.0, 21.1 and 30.9; mean turns 3.67, 3.67 and 8.33. The natural set-up never called REA on held-out, so it behaved exactly like no-tool and its turns match on all six questions.
+
+![Figure 4. Mean seconds and mean turns on each of the 15 development questions for the three set-ups. The directed set-up took more turns than ordinary tools on all 15; the left-alone set-up was slower than ordinary tools on 13 of 15.](figures/fig4-time-and-steps.svg)
+
+*Figure 4. Data: C13 to C15. Each dot is the mean of three runs.*
+
+![Figure 6. Mean cost per run as the tool reports it at API prices: development $0.088, $0.140 and $0.204; held-out $0.074, $0.097 and $0.170, for ordinary tools, REA left alone and REA told to use it.](figures/fig6-cost.svg)
+
+*Figure 6. Data: C16.*
 
 ### 5.4 The Go build-information question
 
@@ -257,7 +281,7 @@ That does not show REA is not useful. The programs here are small, written by on
 
 *[OWNER] decide what to publish, and when. The answer key is withheld during the study so the agents could not read it; reproducing the scoring needs it.*
 
-1. Clone `kmsmohamedansar/rea-study`. 2. Build the programs with `./scripts/build_targets.sh` (move the source folder away first, as `NOTES.md` explains). 3. Install Ghidra 12.1.4, Java 21 and Node, and check REA with `npx -y rea-agents@6.7.0 doctor --provider ghidra`. 4. `python3 scripts/sweep.py --repeats 3` for development and `python3 scripts/heldout.py --run-held-out-once` for held-out. 5. Score with `python3 scripts/results.py` and rebuild every number in this report with `python3 scripts/report_numbers.py`.
+1. Clone `kmsmohamedansar/rea-study`. 2. Build the programs with `./scripts/build_targets.sh` (move the source folder away first, as `NOTES.md` explains). 3. Install Ghidra 12.1.4, Java 21 and Node, and check REA with `npx -y rea-agents@6.7.0 doctor --provider ghidra`. 4. `python3 scripts/sweep.py --repeats 3` for development and `python3 scripts/heldout.py --run-held-out-once` for held-out. 5. Score with `python3 scripts/results.py`, rebuild every number in this report with `python3 scripts/report_numbers.py`, and redraw the figures with `python3 scripts/make_figures.py`.
 
 ---
 

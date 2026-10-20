@@ -57,6 +57,12 @@ def main():
     for key, nm in (("wall_s", "seconds"), ("turns", "turns")):
         m = {(r["target"], r["arm"]): r[key] for r in held}
         N["direction_heldout"][nm] = {f"{a}_higher_than_{b}": sum(m[(t, a)] > m[(t, b)] for t in TH) for a, b in (("rea", "none"), ("rea-directed", "none"))}
+    # per-question means over the valid dev runs (for the figures)
+    pq = collections.defaultdict(lambda: collections.defaultdict(lambda: {"s": [], "t": []}))
+    for r in dev:
+        pq[r["target"]][r["arm"]]["s"].append(r["wall_s"])
+        if r["turns"]: pq[r["target"]][r["arm"]]["t"].append(r["turns"])
+    N["dev_per_target"] = {t: {arm: {"mean_s": rnd(st.mean(v["s"])), "mean_turns": rnd(st.mean(v["t"]), 2), "runs": len(v["s"])} for arm, v in sorted(arms.items())} for t, arms in sorted(pq.items())}
     # adoption detail
     byt = collections.defaultdict(lambda: [0, 0])
     for r in dev:
