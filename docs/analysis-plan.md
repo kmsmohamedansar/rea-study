@@ -38,7 +38,7 @@ For every arm, separately for dev and held-out (and the Go build-info test `p09b
 
 ## Disclosure (goes in the paper)
 
-Experiments were designed, coded and analysed with Claude Code. The author chose the question, ran every experiment on their own MacBook, and reviewed the results. (The author may reword this; it must stay as specific as this.)
+Experiments were designed, coded and analysed with Claude Code. The author chose the question, decided what to test and when to run the held-out set, and ran every experiment on their own Mac. Claude wrote the code and the programs under test, did the analysis and drafted the report. The author has not independently re-scored the answers.
 
 ## Known limits to state
 

@@ -12,7 +12,7 @@ I tested REA, a free reverse-engineering tool for AI agents, on 21 questions abo
 | REA, left alone | 44 | 6 | 11 of 45 development, 0 of 6 held-out | 28.3 | 6.5 | $0.14 |
 | REA, told to use it | 45 | 6 | 45 of 45, 6 of 6 | 34.8 | 9.8 | $0.204 |
 
-Machine: a Mac (`Darwin 27.0.0 arm64`; *[OWNER: model name, chip, memory]*). Model `claude-sonnet-5-5`, Claude Code 2.1.295, REA 6.7.0, Ghidra 12.1.4.
+Machine: a Mac (`Darwin 27.0.0 arm64`; the hardware model was not recorded). Model `claude-sonnet-5-5`, Claude Code 2.1.295, REA 6.7.0, Ghidra 12.1.4.
 
 What I took from it:
 
@@ -27,14 +27,12 @@ What I took from it:
 
 ## Chapter 1: why I built this
 
-This is a personal project. *[OWNER: write this in your own words. Say plainly it is a personal project. Nothing from your employer. Suggested prompts: what made you curious about REA, what you expected to find, why "does it know what it does not know" matters to you, what you hoped this would show about how you work.]*
-
-What I can say from the evidence: REA is new and free, and it claims that an agent using it gets answers with evidence and a record of what could not be determined. The one published benchmark I found was run by the author of a competing tool, on four tasks, without a decompiler installed. Nobody independent had checked. I wanted to know two things:
+This is a personal project. It follows my earlier study of Jev. After that I wanted another piece of the same kind and did not have a topic in mind, so I found REA on GitHub and asked whether it was worth a paper like the Jev one for my portfolio. REA is new and free, and it claims that an agent using it gets answers with evidence and a record of what could not be determined. The one published benchmark I found was run by the author of a competing tool, on four tasks, without a decompiler installed. Nobody independent had checked. I wanted to know two things:
 
 1. When an AI agent explains a program it has no source for, does REA make the explanation more correct?
 2. When the agent cannot tell something from the program, does it say so, or make something up?
 
-It builds on my Jev project: the same habits of fixing the rules before the one-shot run and reporting the numbers that surprise me.
+It reuses the habits from the Jev study: fix the rules before the one-shot run, and report the numbers that surprise me. I only have a Claude Pro plan, so there is no paid API anywhere in it.
 
 ## Chapter 2: the build
 
@@ -69,7 +67,8 @@ Right, partial or wrong against the key; whether the agent called REA; seconds, 
 - Three runs per question, one in the held-out set. Time and step differences could partly be chance.
 - The key checks only the facts it lists, and the held-out answers were read by the person who wrote the key.
 - "No REA" still has the Mac's shell and whatever is installed on it.
-- Claude Code and the model were used under my own plan; the experiments were designed, coded and analysed with Claude Code, and I ran every run and reviewed the results.
+- Claude Code and the model were used under my own plan. The experiments were designed, coded and analysed with Claude Code; I chose the question, decided what to test, and ran every run on my Mac. I have not independently re-scored the answers.
+- The Mac's hardware model, chip and memory were not recorded.
 - Nothing here claims to know how REA works inside. The published benchmark's numbers are second-hand.
 
 ## Claims ledger

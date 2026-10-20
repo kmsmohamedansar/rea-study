@@ -2,13 +2,11 @@
 
 ## Does a reverse-engineering tool help an AI agent understand programs it has no source for, and does the agent know what it cannot know?
 
-**Mohamed Ansar** · Technical report · DRAFT of 20 October 2026
+**Mohamed Ansar** · Technical report · 20 October 2026
 
 *Independent work, not peer reviewed. Every number in this report comes from runs in the accompanying repository, on the machine named next to it. Claims are numbered like [C7] and listed with their evidence in `paper/claims.md`.*
 
-> **[OWNER] to approve or change:** the title, the byline, and the disclosure below.
-
-**Disclosure.** The experiments were designed, coded and analysed with Claude Code, an AI coding assistant. I chose the question, ran every experiment on my own MacBook, and reviewed the results. Claude wrote most of the code and the first drafts of the analysis, and found most of the mistakes described in section 4 by reading the answers. *(Wording is the author's to change, but it must stay as specific as this.)*
+**Disclosure.** The experiments were designed, coded and analysed with Claude Code, an AI coding assistant. I chose the question, decided what to test and when to run the held-out set, and ran every experiment on my own Mac. Claude wrote the code and the programs under test, did the analysis, drafted this report, and found most of the mistakes described in section 4 by reading the answers. I have not independently re-scored the answers.
 
 ---
 
@@ -28,13 +26,13 @@ The most useful findings were about measuring. My answer key and marking script 
 
 ## 1. Why this question
 
-> **[OWNER] to write, in your own words (rule 2: nothing from your employer; Chapter 1 may say plainly this is a personal project).** Suggested prompts: What made you curious about REA specifically? What did you expect to find? Why does "does it know what it does not know" matter to you? What did you hope this project would show about how you work?
-
-What I can say from the evidence, without your voice:
+This is a personal project. It follows my earlier study of Jev, where I tested a new kind of AI model independently, on a task I could mark. After that I wanted another piece of the same kind, and I did not have a topic in mind. I found REA on GitHub and asked whether it was worth a paper like the Jev one for my portfolio. It was, for three reasons that the evidence supports:
 
 - REA is new and free, and it is built around a claim: that when an agent investigates a program with it, the answers come with evidence and with a record of what could not be determined.
 - The one published benchmark I found was run by the author of a competing tool, on four tasks, without a decompiler installed. A decompiler is a program that turns machine code back into rough, readable code, and it is the thing REA mostly exists to drive. That left an obvious gap: nobody independent had checked.
 - A tool that helps an agent is only worth using if it improves the answers, or makes the agent more honest about what it cannot tell, or both. A tool that does neither, but costs more time, is worth knowing about.
+
+One constraint shaped the method from the start: I only have a Claude Pro plan, so there is no paid API anywhere in the study. The agent is Claude Code run from the command line, and my plan's usage limit interrupted the held-out run once (section 4.3).
 
 So the two questions of this report are:
 
@@ -154,7 +152,7 @@ Both are examples of the same lesson: a one-shot step needs its failure cases th
 
 ## 5. Results
 
-All numbers are from the study machine, a Mac (`Darwin 27.0.0 arm64`; *[OWNER] add the model name, chip and memory*), with `claude-sonnet-5-5`, Claude Code 2.1.295, REA 6.7.0 and Ghidra 12.1.4 (a decompiler for Apple silicon that I built from Ghidra's own source, because its official download had none; see section 7).
+All numbers are from the study machine, a Mac (`Darwin 27.0.0 arm64`; the run records name the operating system and architecture only, not the Mac's hardware model, chip or memory, see section 7), with `claude-sonnet-5-5`, Claude Code 2.1.295, REA 6.7.0 and Ghidra 12.1.4 (a decompiler for Apple silicon that I built from Ghidra's own source, because its official download had none; see section 7).
 
 ### 5.1 Accuracy
 
@@ -256,8 +254,6 @@ Second-hand, on different programs, versions and set-up, so only the direction i
 
 ## 6. What this means
 
-> **[OWNER] to decide how far to go here.** A suggested short version:
-
 On small and medium programs, an agent with ordinary tools matched the agent with REA on every accuracy measure I could define, was just as willing to say what it could not know, and was faster and cheaper. Left alone, the agent mostly did not pick REA. When it did, on harder programs and on Go build information, it reached the same answers.
 
 That does not show REA is not useful. The programs here are small, written by one author, and answerable by reading strings and assembly. It is the kind of work an agent with a shell already does well. If REA has an edge, it should be on programs that are large, scrambled, or in formats where ordinary tools are weak, which this study did not test. The honest conclusion is narrower: **if you are asking an agent to explain a small compiled program, adding REA did not make the answer better, and cost more.**
@@ -266,7 +262,7 @@ That does not show REA is not useful. The programs here are small, written by on
 
 ## 7. Limits
 
-- **One model, one machine, one prompt.** A different model, a different Mac, or different wording could behave differently [C3].
+- **One model, one machine, one prompt.** A different model, a different Mac, or different wording could behave differently [C3]. The Mac's hardware model, chip and memory were not recorded; only its operating system and architecture are in the run records.
 - **Small programs, one author.** Single files of tens to a few thousand lines, with answers I wrote. Nothing here says anything about large commercial software, and the programs may share my habits.
 - **Three runs per question, one in the held-out set.** The held-out set is six questions. Differences in time and steps could partly be chance; the 12-of-15 rule is a guard, not a test.
 - **The key checks only its listed facts**, and the reading of the held-out answers was done by the same person who wrote the key.
@@ -279,7 +275,7 @@ That does not show REA is not useful. The programs here are small, written by on
 
 ## 8. Reproducing this
 
-*[OWNER] decide what to publish, and when. The answer key is withheld during the study so the agents could not read it; reproducing the scoring needs it.*
+The answer key (`targets/keys.json`) was withheld while the study was open, so the agents could not read it. It is included in the repository from the close of the study on 20 October 2026, and `targets/keys-history.md` lists the fingerprints of every earlier version, so the repairs described in section 4 can be matched to the files.
 
 1. Clone `kmsmohamedansar/rea-study`. 2. Build the programs with `./scripts/build_targets.sh` (move the source folder away first, as `NOTES.md` explains). 3. Install Ghidra 12.1.4, Java 21 and Node, and check REA with `npx -y rea-agents@6.7.0 doctor --provider ghidra`. 4. `python3 scripts/sweep.py --repeats 3` for development and `python3 scripts/heldout.py --run-held-out-once` for held-out. 5. Score with `python3 scripts/results.py`, rebuild every number in this report with `python3 scripts/report_numbers.py`, and redraw the figures with `python3 scripts/make_figures.py`.
 

@@ -4,7 +4,7 @@ Every claim in the report appears here with the numbers behind it, where they co
 
 How verified: **script** = produced by the marking script and the numbers script. **eye** = a person read the answers. **both** = both, and they were compared.
 
-All runs: one model (`claude-sonnet-5-5`), default effort, Claude Code 2.1.295, REA 6.7.0, Ghidra 12.1.4, one Mac (`Darwin 27.0.0 arm64`; model name still to be filled in by the owner).
+All runs: one model (`claude-sonnet-5-5`), default effort, Claude Code 2.1.295, REA 6.7.0, Ghidra 12.1.4, one Mac (`Darwin 27.0.0 arm64`; its hardware model, chip and memory were not recorded).
 
 ## A. What was run
 

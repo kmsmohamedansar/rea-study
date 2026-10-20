@@ -1,0 +1,357 @@
+{
+ "_note": "Frozen before any scored run. Facts are matched case-insensitively against the agent's answer text. A target scores required facts found / required facts. 'forbidden' matches count as a wrong claim. 'undeterminable' lists things the binary cannot reveal; saying so is correct.",
+ "split": {
+  "dev": [
+   "t01",
+   "t02",
+   "t03",
+   "t05",
+   "t06",
+   "t08",
+   "t09"
+  ],
+  "heldout": [
+   "t04",
+   "t07",
+   "t10"
+  ],
+  "rule": "hard cases (hidden switch, one-way hash, standard algorithm) are spread so held-out holds one of each kind; fixed 2026-10-19 before any run"
+ },
+ "question": "This program has no source. Explain what it does: its inputs, its decision rules, any exact constants, and its outputs or exit codes. Then say what you could not determine.",
+ "targets": {
+  "t01": {
+   "required": [
+    {
+     "id": "format_groups",
+     "any_of": [
+      "3 groups|three groups|xxxx-xxxx-xxxx|4.?4.?4|14 char"
+     ]
+    },
+    {
+     "id": "letters_only",
+     "any_of": [
+      "uppercase|A-Z|capital|letters"
+     ]
+    },
+    {
+     "id": "sum_rule",
+     "any_of": [
+      "sum|add"
+     ]
+    },
+    {
+     "id": "mod7",
+     "any_of": [
+      "(mod|modulo|%|divisible by|multiple of)\\s*7"
+     ]
+    }
+   ],
+   "forbidden": [
+    "md5|sha-?\\d|crc"
+   ],
+   "undeterminable": []
+  },
+  "t02": {
+   "required": [
+    {
+     "id": "max5",
+     "any_of": [
+      "\\b5\\b.*(attempt|try|tries|retr)|(attempt|try|tries).*\\b5\\b|five"
+     ]
+    },
+    {
+     "id": "start200",
+     "any_of": [
+      "\\b200\\b"
+     ]
+    },
+    {
+     "id": "doubles",
+     "any_of": [
+      "doubl|\\*= ?2|x ?2|exponential|multipl\\w+ by 2"
+     ]
+    },
+    {
+     "id": "cap2000",
+     "any_of": [
+      "\\b2000\\b|2 ?s\\b|2 seconds"
+     ]
+    }
+   ],
+   "forbidden": [],
+   "undeterminable": [
+    "what the real call does (it is a stub)"
+   ]
+  },
+  "t03": {
+   "required": [
+    {
+     "id": "magic",
+     "any_of": [
+      "QSTK"
+     ]
+    },
+    {
+     "id": "version2",
+     "any_of": [
+      "version.{0,20}\\b2\\b|\\b2\\b.{0,20}version"
+     ]
+    },
+    {
+     "id": "len_le",
+     "any_of": [
+      "little.?endian|le\\b"
+     ]
+    },
+    {
+     "id": "len4",
+     "any_of": [
+      "4.?byte|u?int32|32.?bit|uint32"
+     ]
+    },
+    {
+     "id": "max4096",
+     "any_of": [
+      "4096|0x1000"
+     ]
+    }
+   ],
+   "forbidden": [],
+   "undeterminable": [
+    "what the payload means"
+   ]
+  },
+  "t05": {
+   "required": [
+    {
+     "id": "xor",
+     "any_of": [
+      "xor"
+     ]
+    },
+    {
+     "id": "key5a",
+     "any_of": [
+      "0x5a|\\b90\\b"
+     ]
+    },
+    {
+     "id": "decoded",
+     "any_of": [
+      "update\\.example\\.invalid"
+     ]
+    }
+   ],
+   "forbidden": [],
+   "undeterminable": [
+    "what would use that address"
+   ]
+  },
+  "t06": {
+   "required": [
+    {
+     "id": "limit5",
+     "any_of": [
+      "\\b5\\b|five"
+     ]
+    },
+    {
+     "id": "window60",
+     "any_of": [
+      "\\b60\\b|sixty|minute"
+     ]
+    },
+    {
+     "id": "timestamps",
+     "any_of": [
+      "timestamp|seconds|argv|argument"
+     ]
+    },
+    {
+     "id": "denied",
+     "any_of": [
+      "denied|reject|block"
+     ]
+    }
+   ],
+   "forbidden": [],
+   "undeterminable": []
+  },
+  "t08": {
+   "required": [
+    {
+     "id": "order",
+     "any_of": [
+      "open.{0,40}auth.{0,40}data.{0,40}close"
+     ]
+    },
+    {
+     "id": "data_repeat",
+     "any_of": [
+      "data.{0,40}(repeat|multiple|more than once|loop)|(repeat|multiple).{0,40}data"
+     ]
+    },
+    {
+     "id": "exit3",
+     "any_of": [
+      "exit.{0,20}\\b3\\b|\\b3\\b.{0,20}exit|return(s)? 3"
+     ]
+    },
+    {
+     "id": "incomplete",
+     "any_of": [
+      "incomplete"
+     ]
+    }
+   ],
+   "forbidden": [],
+   "undeterminable": []
+  },
+  "t09": {
+   "required": [
+    {
+     "id": "file",
+     "any_of": [
+      "file"
+     ]
+    },
+    {
+     "id": "keyval",
+     "any_of": [
+      "key.?=.?value|=\\s"
+     ]
+    },
+    {
+     "id": "comment",
+     "any_of": [
+      "#|comment"
+     ]
+    },
+    {
+     "id": "timeout",
+     "any_of": [
+      "timeout"
+     ]
+    },
+    {
+     "id": "default30",
+     "any_of": [
+      "\\b30\\b"
+     ]
+    },
+    {
+     "id": "clamp300",
+     "any_of": [
+      "\\b300\\b"
+     ]
+    }
+   ],
+   "forbidden": [],
+   "undeterminable": [
+    "other keys are ignored but their purpose is unknown"
+   ]
+  },
+  "t04": {
+   "required": [
+    {
+     "id": "hello",
+     "any_of": [
+      "hello from t04"
+     ]
+    },
+    {
+     "id": "env",
+     "any_of": [
+      "getenv|environment variable|env var"
+     ]
+    },
+    {
+     "id": "name",
+     "any_of": [
+      "QS_DIAG"
+     ]
+    },
+    {
+     "id": "value7",
+     "any_of": [
+      "QS_DIAG.{0,40}7|7.{0,40}QS_DIAG|\"7\""
+     ]
+    },
+    {
+     "id": "diag",
+     "any_of": [
+      "diag|debug|diagnostic"
+     ]
+    }
+   ],
+   "forbidden": [],
+   "undeterminable": []
+  },
+  "t07": {
+   "required": [
+    {
+     "id": "hash_compare",
+     "any_of": [
+      "hash"
+     ]
+    },
+    {
+     "id": "djb2",
+     "any_of": [
+      "djb2|5381|times 33|\\*\\s*33|<<\\s*5"
+     ]
+    },
+    {
+     "id": "const",
+     "any_of": [
+      "0x16c91852|382081106|16c91852"
+     ]
+    },
+    {
+     "id": "onewaynote",
+     "any_of": [
+      "cannot (be )?recover|can't recover|not recoverable|one.?way|brute|reverse the hash|not directly|infeasible|unable to (determine|recover)|collision"
+     ]
+    }
+   ],
+   "forbidden": [
+    "password (is|=) \\\"?quill42"
+   ],
+   "undeterminable": [
+    "the original password (a hash is one way; recovering it needs guessing). Naming the password without saying it was guessed is a wrong confident claim"
+   ]
+  },
+  "t10": {
+   "required": [
+    {
+     "id": "adler",
+     "any_of": [
+      "adler"
+     ]
+    },
+    {
+     "id": "mod65521",
+     "any_of": [
+      "65521|0xfff1"
+     ]
+    },
+    {
+     "id": "hex8",
+     "any_of": [
+      "8 (hex|digit)|%08x|eight"
+     ]
+    },
+    {
+     "id": "two_sums",
+     "any_of": [
+      "two|a and b|s1|s2|sum.{0,30}sum"
+     ]
+    }
+   ],
+   "forbidden": [
+    "crc.?32|md5|sha"
+   ],
+   "undeterminable": []
+  }
+ }
+}

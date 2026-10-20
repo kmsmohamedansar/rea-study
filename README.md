@@ -5,7 +5,7 @@ An independent test of [REA](https://github.com/morluto/rea) ("Reverse Engineer 
 1. When an agent explains a program it has no source for, does REA make the explanation more correct?
 2. When the agent cannot tell something from the program, does it say so, or make something up?
 
-**Status (2026-10-20):** all experiments are finished and scored. The report is a draft awaiting the author's own sections (`[OWNER]` marks).
+**Status (2026-10-20):** the study is closed. All experiments are finished and scored, and the report is written.
 
 ## What was found, in one paragraph
 
@@ -41,7 +41,7 @@ tests/               72 tests
 
 ## What is not in this repo, and why
 
-- **The answer key (`targets/keys.json`).** It was kept off the machine that ran the agents so they could not read it, and is withheld while the study is open. Scoring needs it. *[OWNER: decide whether and when to publish it.]*
+- **Nothing that needs the answer key kept private any more.** `targets/keys.json` was kept off the machine that ran the agents so they could not read it. It is included from the close of the study; `targets/keys-history.md` gives the fingerprints of every earlier version.
 - **Built programs.** Build them with `scripts/build_targets.sh`.
 
 ## Reproducing
@@ -58,4 +58,4 @@ Needs a Mac (Apple silicon), Node 22 or newer, Java 21, Ghidra 12.1.4 with a dec
 
 ## Licence
 
-*[OWNER: choose a licence for this repo's own code and text.]* Third-party code keeps its own licence (`targets/THIRD_PARTY.md`, `vendor/rea-skill/LICENSE`).
+Shared for viewing only, as in my Jev repo: see `LICENSE`. Third-party code keeps its own licence (`targets/THIRD_PARTY.md`, `vendor/rea-skill/LICENSE`).

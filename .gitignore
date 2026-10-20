@@ -1,11 +1,3 @@
 targets/bin/
-targets/keys.json
 __pycache__/
 *.pyc
-targets/keys.v1.json
-targets/keys.v2.json
-targets/keys.v3.json
-targets/keys.v4.json
-targets/keys.v5.json
-targets/keys.v7.json
-targets/keys.v8.json

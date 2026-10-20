@@ -4,13 +4,12 @@
 
 Turns paper/report.md into <site>/portfolio/public/p/rea-study/report.html (markdown by
 `npx -y marked@14.1.4`), copies the six figures beside it, and prints a PDF from the page with
-headless Chromium. While the report still has [OWNER] placeholders the page carries a visible
-DRAFT banner; set DRAFT = False below only when the author has written every marked part.
+headless Chromium. If DRAFT is set to True the page carries a visible DRAFT banner.
 """
 import argparse, html, pathlib, re, shutil, subprocess, sys, tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DRAFT = True
+DRAFT = False
 CHROME = next(iter(sorted(pathlib.Path("/opt/pw-browsers").glob("chromium-*/chrome-linux/chrome"))), None)
 
 CSS = """
@@ -67,8 +66,7 @@ def main():
     body = re.sub(r"<table>", '<div class="table"><table>', body).replace("</table>", "</table></div>")
     title = "My Take on REA · Mohamed Ansar"
     desc = "An independent test of whether a reverse-engineering tool helps an AI agent explain programs it has no source for, and whether the agent says what it cannot know."
-    banner = ('<p class="draft">Draft. Parts marked [OWNER] are still to be written by the author, and the title, byline and disclosure are not yet approved. '
-              'Do not treat this page as final.</p>') if DRAFT else ""
+    banner = ('<p class="draft">Draft. Do not treat this page as final.</p>') if DRAFT else ""
     page = f"""<!doctype html>
 <html lang="en">
 <head>
