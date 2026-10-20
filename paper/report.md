@@ -4,7 +4,7 @@
 
 **Mohamed Ansar** · Technical report · 20 October 2026
 
-*Independent work, not peer reviewed. Every number in this report comes from runs in the accompanying repository, on the machine named next to it. Claims are numbered like [C7] and listed with their evidence in `paper/claims.md`.*
+*Every number in this report comes from runs in the accompanying repository, on the machine named next to it. Claims are numbered like [C7] and listed with their evidence in `paper/claims.md`.*
 
 ---
 
@@ -163,7 +163,7 @@ All numbers are from the study machine, a MacBook Air with an M4 chip and 16 GB 
 
 Easy tier: 21 of 21 right in every set-up. Harder tier: 21, 20 (+1 partial), 21. The one partial answer is a stack-machine reply that never described the conditional-jump operation.
 
-![Figure 2. Share of answers that were fully right, in three panels: development by script, held-out by script, and held-out after a person read every answer. Development: 45, 44 and 45 of 45. Held-out by script: 3, 5 and 6 of 6. Held-out after reading: 5, 6 and 6 of 6.](figures/fig2-accuracy.svg)
+![Figure 2. Share of answers that were fully right, in three panels: development by script, held-out by script, and held-out after answer-by-answer review. Development: 45, 44 and 45 of 45. Held-out by script: 3, 5 and 6 of 6. Held-out after review: 5, 6 and 6 of 6.](figures/fig2-accuracy.svg)
 
 *Figure 2. Data: C6 and C7.*
 
@@ -172,7 +172,7 @@ Easy tier: 21 of 21 right in every set-up. Harder tier: 21, 20 (+1 partial), 21.
 | | none | rea | rea-directed |
 |---|---|---|---|
 | Right, by script | 3 | 5 | 6 |
-| Right, after a person read all 18 answers | 5 | 6 | 6 |
+| Right, after reviewing all 18 answers | 5 | 6 | 6 |
 
 Three disagreements, all the script being too strict (section 4.1). One real miss, which the script and the reading agree on: the no-tool reply for `p06` said the program "contains what look like the SHA-256 round constants" without naming them or the 64 rounds.
 
