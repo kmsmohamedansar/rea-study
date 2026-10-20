@@ -22,7 +22,7 @@ All runs: one model (`claude-sonnet-5-5`), default effort, Claude Code 2.1.295, 
 |---|---|---|---|---|---|
 | C6 | Development: the no-tool arm got 45 of 45 right, the natural REA arm 44 of 45 (one partial), the directed REA arm 45 of 45. | 45, 44+1, 45 | `dev.<arm>.right` | both | The one partial is a `p01` answer that never describes the conditional-jump operation. |
 | C7 | Held-out, by script: right in 3, 5 and 6 of 6 (none, rea, rea-directed). After a person read all 18 answers: 5, 6 and 6 of 6. | 3/5/6 then 5/6/6 | `heldout.*.right`, `heldout_audit.by_arm`, `results/heldout-eye-audit.json` | both | The reading was done by the person who wrote the key. Three script misses were the script being too strict. |
-| C8 | By the rule written before the run (a gap needs 2 or more fully right answers after the reading), there is **no accuracy difference** between arms. | largest gap 1 | `heldout_audit`, `docs/analysis-plan.md` | both | With the script's own grades the gap would have been 3. The reading is what removes it. |
+| C8 | By the rule written before the run (a gap needs 2 or more fully right answers after the reading), no accuracy benefit from REA was detected on these programs; this does not establish equivalence between arms. | largest gap 1 | `heldout_audit`, `docs/analysis-plan.md` | both | With the script's own grades the gap would have been 3. The reading is what removes it. |
 | C9 | On the 7 easy and 7 harder development programs, accuracy was the same in every arm except one partial answer in the natural REA arm on a harder program. | 21/21, 21/21, 21/21 easy; 21, 20+1, 21 harder | `dev_by_tier.*` | script | Harder means harder than the easy set, not hard. |
 
 ## C. Whether the agent chooses REA
@@ -55,7 +55,7 @@ All runs: one model (`claude-sonnet-5-5`), default effort, Claude Code 2.1.295, 
 
 | ID | Claim | Number | Check | Verified | Limits |
 |---|---|---|---|---|---|
-| C21 | On the three questions with a real unknown (a hidden decryption key, a stored hash), each arm named the unknown in all 5 runs and none stated the hidden text or the password. | 5/5 admitted, 0 overclaimed, per arm | `honesty.*`; quotes in section 5.5 are from the `p10` (development) and `p05` (held-out) answers in `results/raw/` | both | Five runs per arm, three questions. The patterns for "named the unknown" were repaired once on development answers; they were frozen before held-out, where a person read all six answers and agreed with the script. |
+| C21 | On the three questions with a real unknown (a hidden decryption key, a stored hash), each arm named the unknown in all 5 runs and none stated the hidden text or the password. | 5/5 admitted, 0 overclaimed, per arm | `honesty.*`; quotes in section 5.5 are from the `p10` (development) and `p05` (held-out) answers in `results/raw/` | both | Five runs per arm, three questions. The shared prompt explicitly asked for unknowns, so this does not measure unprompted disclosure. The patterns for "named the unknown" were repaired once on development answers; they were frozen before held-out, where a person read all six answers and agreed with the script. |
 | C22 | Stated confidence ranged from 0.80 to 0.97 across all 153 runs, and every answer carried the confidence line. | 0.80 to 0.97 | `confidence.*` | script | One incomplete held-out answer (`p06`, no-tool) stated 0.93, the same as complete answers. One case, so it is not a calibration result. |
 
 ## G. What went wrong while measuring (process findings)
@@ -93,3 +93,4 @@ All figures in this section are quoted from `bench/BENCHMARK.md` in the reposito
 - That confidence is well or badly calibrated. There are too few wrong answers.
 - That a result would hold with a different prompt. The prompt was one fixed text.
 - That the answer key is correct beyond its listed facts. It checks listed facts only. One answer was seen to state something wrong that the key does not test (a stack machine's print instruction described as not removing the value).
+- That agents would volunteer uncertainty unprompted. Every arm was explicitly asked what it could not determine.

@@ -16,10 +16,10 @@ Machine: a MacBook Air with an M4 chip and 16 GB of memory (`Darwin 27.0.0 arm64
 
 What I took from it:
 
-- **On small programs, REA did not make the answers better.** No accuracy difference by the rule I wrote before the held-out run.
+- **On these small programs, I did not detect an accuracy benefit from REA.** The scores were near the ceiling, so this does not establish equal accuracy on other programs.
 - **Left alone, the agent mostly ignored REA.** It had the tools and REA's own instructions, and used them in 11 of 45 development runs, more than half of those on the two Go questions.
 - **Told to use it, it took longer and more steps for the same answers.** About 1.8 times as long when asked for a Go program's build information, which REA advertises it can read. Ordinary tools found the same facts.
-- **Everyone was honest about what could not be known.** On the three questions with a hidden key or a stored hash, every set-up said it could not recover the secret, in all 5 runs each, and none stated it.
+- **Every set-up acknowledged the unknown when asked.** The prompt explicitly requested what could not be determined. On the three questions with a hidden key or a stored hash, each set-up named the unknown in all 5 runs and none stated the secret. This does not test whether the agent would volunteer uncertainty unprompted.
 - **My own marking was the weakest part.** My answer key and script were wrong in every scoring round, in both directions, and I only found out by reading the answers.
 - **I had to build part of the toolchain myself.** Ghidra's Mac download has no decompiler for Apple silicon, so I built one from its source. It is written up as a limit.
 
@@ -80,7 +80,7 @@ Every claim on this page, and where its evidence is. All 32 claims in full: `pap
 | 153 valid runs: 135 development, 18 held-out | `python3 scripts/report_numbers.py`; `paper/numbers.json`; `results/raw/` |
 | Same model, Claude Code, REA and Ghidra versions throughout | `paper/numbers.json` (`environment`, `checks`); each run record names them |
 | REA's server, 207 tools and instruction file were present in every REA run and absent in every ordinary-tools run | `paper/numbers.json` (`checks`) |
-| No accuracy difference (45, 44, 45 of 45; held-out 5, 6, 6 of 6 after reading) | `paper/numbers.json` (`dev`, `heldout_audit`); `results/heldout-eye-audit.json` |
+| No accuracy benefit detected on these programs (45, 44, 45 of 45; held-out 5, 6, 6 of 6 after reading) | `paper/numbers.json` (`dev`, `heldout_audit`); `results/heldout-eye-audit.json` |
 | The rules for what I could claim were fixed before the held-out run | `docs/analysis-plan.md`; commit `d1d62b2` came before the held-out results were added |
 | The answer key was never on the machine that ran the agents | `.gitignore`; `scripts/build_targets.sh`; `NOTES.md` |
 | Left alone, the agent called REA in 11 of 45 development runs and 0 of 6 held-out | `paper/numbers.json` (`dev`, `heldout`, `dev_by_tier`) |
