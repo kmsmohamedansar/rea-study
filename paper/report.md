@@ -152,7 +152,7 @@ Both are examples of the same lesson: a one-shot step needs its failure cases th
 
 ## 5. Results
 
-All numbers are from the study machine, a Mac (`Darwin 27.0.0 arm64`; the run records name the operating system and architecture only, not the Mac's hardware model, chip or memory, see section 7), with `claude-sonnet-5-5`, Claude Code 2.1.295, REA 6.7.0 and Ghidra 12.1.4 (a decompiler for Apple silicon that I built from Ghidra's own source, because its official download had none; see section 7).
+All numbers are from the study machine, a MacBook Air with an M4 chip and 16 GB of memory (`Darwin 27.0.0 arm64`; the run records hold the operating system and architecture only, and the model, chip and memory are as the author reported them afterwards, see section 7), with `claude-sonnet-5-5`, Claude Code 2.1.295, REA 6.7.0 and Ghidra 12.1.4 (a decompiler for Apple silicon that I built from Ghidra's own source, because its official download had none; see section 7).
 
 ### 5.1 Accuracy
 
@@ -262,7 +262,7 @@ That does not show REA is not useful. The programs here are small, written by on
 
 ## 7. Limits
 
-- **One model, one machine, one prompt.** A different model, a different Mac, or different wording could behave differently [C3]. The Mac's hardware model, chip and memory were not recorded; only its operating system and architecture are in the run records.
+- **One model, one machine, one prompt.** A different model, a different Mac, or different wording could behave differently [C3]. The Mac's model, chip and memory (MacBook Air, M4, 16 GB) were reported by the author after the runs and are not recorded by the harness; only its operating system and architecture are in the run records.
 - **Small programs, one author.** Single files of tens to a few thousand lines, with answers I wrote. Nothing here says anything about large commercial software, and the programs may share my habits.
 - **Three runs per question, one in the held-out set.** The held-out set is six questions. Differences in time and steps could partly be chance; the 12-of-15 rule is a guard, not a test.
 - **The key checks only its listed facts**, and the reading of the held-out answers was done by the same person who wrote the key.

@@ -12,7 +12,7 @@ I tested REA, a free reverse-engineering tool for AI agents, on 21 questions abo
 | REA, left alone | 44 | 6 | 11 of 45 development, 0 of 6 held-out | 28.3 | 6.5 | $0.14 |
 | REA, told to use it | 45 | 6 | 45 of 45, 6 of 6 | 34.8 | 9.8 | $0.204 |
 
-Machine: a Mac (`Darwin 27.0.0 arm64`; the hardware model was not recorded). Model `claude-sonnet-5-5`, Claude Code 2.1.295, REA 6.7.0, Ghidra 12.1.4.
+Machine: a MacBook Air with an M4 chip and 16 GB of memory (`Darwin 27.0.0 arm64`; the model, chip and memory are as I reported them afterwards, the run records hold only the system and architecture). Model `claude-sonnet-5-5`, Claude Code 2.1.295, REA 6.7.0, Ghidra 12.1.4.
 
 What I took from it:
 
@@ -68,7 +68,7 @@ Right, partial or wrong against the key; whether the agent called REA; seconds, 
 - The key checks only the facts it lists, and the held-out answers were read by the person who wrote the key.
 - "No REA" still has the Mac's shell and whatever is installed on it.
 - Claude Code and the model were used under my own plan. The experiments were designed, coded and analysed with Claude Code; I chose the question, decided what to test, and ran every run on my Mac. I have not independently re-scored the answers.
-- The Mac's hardware model, chip and memory were not recorded.
+- The Mac's model, chip and memory (MacBook Air, M4, 16 GB) were reported by the author after the runs, not recorded by the harness.
 - Nothing here claims to know how REA works inside. The published benchmark's numbers are second-hand.
 
 ## Claims ledger
