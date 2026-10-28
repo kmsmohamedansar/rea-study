@@ -5,7 +5,7 @@ An independent test of [REA](https://github.com/morluto/rea) ("Reverse Engineer 
 1. When an agent explains a program it has no source for, does REA make the explanation more correct?
 2. When the agent cannot tell something from the program, does it say so, or make something up?
 
-**Status (2026-10-20):** the study is closed. All experiments are finished and scored, and the report is written.
+**Status (2026-10-20):** the experiments are complete and scored; the study is closed. The written report remains a draft.
 
 ## What was found, in one paragraph
 
