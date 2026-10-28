@@ -7,6 +7,8 @@ An independent test of [REA](https://github.com/morluto/rea) ("Reverse Engineer 
 
 **Status (2026-10-20):** the experiments are complete and scored; the study is closed. The written report remains a draft.
 
+[Read the report](https://ansarbuilds.dev/p/rea-study/report.html) · [Download the PDF](https://ansarbuilds.dev/p/rea-study/report.pdf) · [Citation](CITATION.cff)
+
 ## What was found, in one paragraph
 
 On these small and medium programs, the study did not detect an accuracy benefit from REA (development 45, 44 and 45 of 45; held-out 5, 6 and 6 of 6 after the answers were read). Those near-ceiling scores do not establish equal accuracy on other programs. Left alone, the agent rarely chose REA. Told to use it, it took longer and more steps. When the prompt asked what could not be determined, every set-up said it could not recover a hidden secret; the study did not test whether agents would volunteer that uncertainty unprompted. See `CASE_STUDY.md` for the short version and `paper/report.md` for the full report.

@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you reference this study, please cite the technical report."
+type: generic
+title: "My Take on REA: Does a reverse-engineering tool help an AI agent understand programs it has no source for?"
+authors:
+  - given-names: Mohamed
+    family-names: Ansar
+date-released: 2026-10-20
+url: "https://ansarbuilds.dev/p/rea-study/report.html"
+repository-code: "https://github.com/kmsmohamedansar/rea-study"
