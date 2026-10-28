@@ -11,6 +11,10 @@ An independent test of [REA](https://github.com/morluto/rea) ("Reverse Engineer 
 
 On these small and medium programs, the study did not detect an accuracy benefit from REA (development 45, 44 and 45 of 45; held-out 5, 6 and 6 of 6 after the answers were read). Those near-ceiling scores do not establish equal accuracy on other programs. Left alone, the agent rarely chose REA. Told to use it, it took longer and more steps. When the prompt asked what could not be determined, every set-up said it could not recover a hidden secret; the study did not test whether agents would volunteer that uncertainty unprompted. See `CASE_STUDY.md` for the short version and `paper/report.md` for the full report.
 
+![Accuracy across the development and held-out questions, before and after manual review](paper/figures/fig2-accuracy.svg)
+
+The held-out set is small, and manual review corrected several script scores. See the report for the complete method and limitations.
+
 ## Read this first
 
 | File | What it is |

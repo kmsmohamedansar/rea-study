@@ -1,4 +1,4 @@
-import json, os, pathlib, stat, subprocess, sys, tempfile, unittest
+import json, os, pathlib, platform, stat, subprocess, sys, tempfile, unittest
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import run, results
@@ -65,7 +65,7 @@ class T(unittest.TestCase):
     def test_end_to_end_to_summary(self):
         self.assertEqual(self.go("t01", "none"), 0); self.assertEqual(self.go("t01", "rea"), 0)
         rec = json.loads((self.raw / "dev" / "rea" / "t01.json").read_text())
-        self.assertEqual(rec["rea_version"], "6.7.0"); self.assertIn("Linux", rec["machine"])
+        self.assertEqual(rec["rea_version"], "6.7.0"); self.assertIn(platform.system(), rec["machine"])
         self.assertEqual(rec["model"], "claude-sonnet-5-5")
         out = self.tmp / "out"; results.main(["--raw-dir", str(self.raw), "--out-dir", str(out)])
         s = json.loads((out / "dev.json").read_text())["summary"]
